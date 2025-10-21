@@ -13,14 +13,14 @@ This project is a web application for AccessRide, providing various functionalit
     - **main.js**: The main JavaScript file for interactivity.
   - **img/**: Directory for images used in the application.
 - **pages/**: Contains separate HTML pages for different functionalities.
-  - **atividades.html**: Page for activities.
-  - **cadastro.html**: Page for user registration.
-  - **corrida.html**: Page for rides.
-  - **home.html**: Home page of the application.
-  - **login.html**: Page for user login.
-  - **segurança.html**: Page for security information.
-  - **sobre.html**: Page providing information about the application.
-  - **viajar.html**: Page for travel-related content.
+  - **/atividades.html**: Page for activities.
+  - **/cadastro.html**: Page for user registration.
+  - **/corrida.html**: Page for rides.
+  - **/home.html**: Home page of the application.
+  - **/login.html**: Page for user login.
+  - **/segurança.html**: Page for security information.
+  - **./sobre.html**: Page providing information about the application.
+  - **/viajar.html**: Page for travel-related content.
 
 ## Getting Started
 
