@@ -1,0 +1,80 @@
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect" />
+  <link as="style"
+    href="https://fonts.googleapis.com/css2?display=swap&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900&amp;family=Spline+Sans%3Awght%40400%3B500%3B700"
+    onload="this.rel='stylesheet'" rel="stylesheet" />
+  <meta charset="utf-8" />
+  <link rel="icon" href="./img/cadeira.png">
+  <title>AccessRide</title>
+  <link href="data:image/x-icon;base64," rel="icon" type="image/x-icon" />
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+  <style type="text/tailwindcss">
+    :root {
+            --placard-color: #1E90FF;
+          }
+        </style>
+</head>
+
+<body class="bg-[#111714]">
+  <div class="relative flex size-full min-h-screen flex-col dark group/design-root overflow-x-hidden"
+    style='font-family: "Spline Sans", "Noto Sans", sans-serif;'>
+    <header class="sticky top-0 z-50 w-full bg-[#111714]/80 backdrop-blur-sm">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex h-16 items-center justify-between">
+          <div class="flex items-center gap-4 text-white">
+            <span class="material-symbols-outlined text-3xl text-[#38e07b]">accessible_forward</span>
+            <a href="./home.html">
+              <h1 class="text-xl font-bold tracking-tight">AccessRide</h1>
+          </div>
+          <nav class="hidden md:flex items-center gap-8">
+            <a class="text-sm font-medium text-white hover:text-white transition-colors" href="home.html">
+              Home</a>
+            <a class="text-sm font-medium text-gray-300 hover:text-white transition-colors" href="viajar.html">
+              Viajar</a>
+            <a class="text-sm font-medium text-gray-300 hover:text-white transition-colors"
+              href="segurança.html">Segurança</a>
+            <a class="text-sm font-medium text-gray-300 hover:text-white transition-colors"
+              href="atividades.html">Atividades</a>
+            <a class="text-sm font-medium text-gray-300 hover:text-white transition-colors" href="sobre.html">
+              Sobre nós</a>
+          </nav>
+          <div class="flex items-center gap-2">
+            <button
+              class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-[#29382f] text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-gray-700 transition-colors">
+              <a href="./login.html" class="truncate">Conecte-se</a>
+            </button>
+            <button
+              class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-[#38e07b] text-[#111714] text-sm font-bold leading-normal tracking-[0.015em] hover:bg-green-400 transition-colors">
+              <a href="./viajar.html" class="truncate">
+                Solicite uma carona</a>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+    
+    <footer class="bg-[#1c2620]">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12 text-center text-[#9eb7a8]">
+        <div class="flex justify-center items-center gap-4 mb-6">
+          <span class="material-symbols-outlined text-3xl text-[#38e07b]">accessible_forward</span>
+          <h2 class="text-xl font-bold text-white">AccessRide</h2>
+        </div>
+        <div class="flex flex-wrap items-center justify-center gap-6 mb-6">
+          <a class="text-sm hover:text-white transition-colors" href="#">
+            Política de Privacidade</a>
+          <a class="text-sm hover:text-white transition-colors" href="#">Termos de Serviço</a>
+          <a class="text-sm hover:text-white transition-colors" href="#">
+            Contate-nos</a>
+        </div>
+        <p class="text-sm">© 2025 AccessRide. Todos os direitos reservados.</p>
+      </div>
+    </footer>
+    
+  </div>
+</body>
+
+</html>

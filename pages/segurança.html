@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AccessRide - Segurança</title>
+    <link rel="icon" href="./img/cadeira.png">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+    <style type="text/tailwindcss">
+        :root {
+            --placard-color: #1E90FF;
+        }
+    </style>
+</head>
+<body class="bg-[#111714] min-h-screen" style='font-family: "Spline Sans", "Noto Sans", sans-serif;'>
+    <div class="relative flex size-full min-h-screen flex-col dark group/design-root overflow-x-hidden">
+        <header class="sticky top-0 z-50 w-full bg-[#111714]/80 backdrop-blur-sm">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex h-16 items-center justify-between">
+                    <div class="flex items-center gap-4 text-white">
+                        <span class="material-symbols-outlined text-3xl text-[#38e07b]">accessible_forward</span>
+                        <a href="./home.html">
+                        <h1 class="text-xl font-bold tracking-tight">AccessRide</h1>
+                    </div>
+                    <nav class="hidden md:flex items-center gap-8">
+                        <a class="text-sm font-medium text-gray-300 hover:text-white transition-colors" href="home.html">
+                            Home</a>
+                        <a class="text-sm font-medium text-gray-300 hover:text-white transition-colors" href="viajar.html">
+                            Viajar</a>
+                        <a class="text-sm font-medium text-white hover:text-white transition-colors" href="segurança.html">
+                            Segurança</a>
+                        <a class="text-sm font-medium text-gray-300 hover:text-white transition-colors"
+                            href="atividades.html">Atividades</a>
+                        <a class="text-sm font-medium text-gray-300 hover:text-white transition-colors" href="sobre.html">
+                            Sobre nós</a>
+                    </nav>
+                    <div class="flex items-center gap-2">
+                        <a href="login.html"
+                            class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-[#29382f] text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-gray-700 transition-colors">
+                            <span class="truncate">Conecte-se</span>
+                        </a>
+                        <button
+                            class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-[#38e07b] text-[#111714] text-sm font-bold leading-normal tracking-[0.015em] hover:bg-green-400 transition-colors">
+                            <a href="./viajar.html" class="truncate">
+                                Solicite uma carona</a>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <section class="mb-16">
+                <h1 class="text-4xl font-bold text-white mb-6">Sua segurança é nossa prioridade</h1>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                    <div class="bg-[#1c2620] rounded-xl p-8">
+                        <div class="flex items-center mb-4">
+                            <span class="material-symbols-outlined text-4xl text-[#38e07b] mr-4">verified_user</span>
+                            <h3 class="text-2xl font-bold text-white">Motoristas verificados</h3>
+                        </div>
+                        <p class="text-[#9eb7a8]">Todos os motoristas passam por verificações rigorosas de antecedentes, incluindo verificação de histórico criminal e de direção. Nossos padrões de segurança são 5x mais rigorosos do que os requisitos locais para táxis.</p>
+                    </div>
+
+                    <div class="bg-[#1c2620] rounded-xl p-8">
+                        <div class="flex items-center mb-4">
+                            <span class="material-symbols-outlined text-4xl text-[#38e07b] mr-4">support_agent</span>
+                            <h3 class="text-2xl font-bold text-white">Suporte 24/7</h3>
+                        </div>
+                        <p class="text-[#9eb7a8]">Nossa equipe de segurança está disponível 24 horas por dia, 7 dias por semana. Se você precisar de ajuda durante sua viagem, pode entrar em contato conosco diretamente pelo aplicativo.</p>
+                    </div>
+
+                    <div class="bg-[#1c2620] rounded-xl p-8">
+                        <div class="flex items-center mb-4">
+                            <span class="material-symbols-outlined text-4xl text-[#38e07b] mr-4">share_location</span>
+                            <h3 class="text-2xl font-bold text-white">Rastreamento em tempo real</h3>
+                        </div>
+                        <p class="text-[#9eb7a8]">Todas as viagens são rastreadas por GPS. Você pode compartilhar seu trajeto em tempo real com familiares ou amigos para que saibam exatamente onde você está.</p>
+                    </div>
+
+                    <div class="bg-[#1c2620] rounded-xl p-8">
+                        <div class="flex items-center mb-4">
+                            <span class="material-symbols-outlined text-4xl text-[#38e07b] mr-4">accessibility_new</span>
+                            <h3 class="text-2xl font-bold text-white">Treinamento em acessibilidade</h3>
+                        </div>
+                        <p class="text-[#9eb7a8]">Nossos motoristas recebem treinamento especializado em acessibilidade e atendimento a pessoas com deficiência, garantindo uma experiência segura e confortável para todos os passageiros.</p>
+                    </div>
+                </div>
+
+                <div class="bg-[#1c2620] rounded-xl p-8 mb-12">
+                    <h2 class="text-2xl font-bold text-white mb-6">Dicas de segurança</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="flex items-start">
+                            <span class="material-symbols-outlined text-[#38e07b] mr-4">check_circle</span>
+                            <div>
+                                <h4 class="text-white font-bold mb-2">Verifique o veículo</h4>
+                                <p class="text-[#9eb7a8] text-sm">Confirme a placa, modelo e cor do veículo antes de entrar. O aplicativo mostrará essas informações.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="material-symbols-outlined text-[#38e07b] mr-4">check_circle</span>
+                            <div>
+                                <h4 class="text-white font-bold mb-2">Compartilhe seu trajeto</h4>
+                                <p class="text-[#9eb7a8] text-sm">Use o recurso "Compartilhar trajeto" no aplicativo para manter seus contatos informados.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="material-symbols-outlined text-[#38e07b] mr-4">check_circle</span>
+                            <div>
+                                <h4 class="text-white font-bold mb-2">Sente-se no banco de trás</h4>
+                                <p class="text-[#9eb7a8] text-sm">Para maior segurança, recomendamos sentar no banco traseiro, especialmente se estiver viajando sozinho.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="material-symbols-outlined text-[#38e07b] mr-4">check_circle</span>
+                            <div>
+                                <h4 class="text-white font-bold mb-2">Use o cinto de segurança</h4>
+                                <p class="text-[#9eb7a8] text-sm">Certifique-se de que você e seu equipamento de mobilidade estejam devidamente fixados.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-[#1c2620] rounded-xl p-8">
+                    <h2 class="text-2xl font-bold text-white mb-6">Emergência</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="bg-[#29382f] rounded-lg p-6 text-center">
+                            <span class="material-symbols-outlined text-4xl text-[#38e07b] mb-4">emergency</span>
+                            <h4 class="text-white font-bold mb-2">Botão de emergência</h4>
+                            <p class="text-[#9eb7a8] text-sm">O aplicativo AccessRide tem um botão de emergência que conecta você diretamente com as autoridades locais.</p>
+                        </div>
+                        <div class="bg-[#29382f] rounded-lg p-6 text-center">
+                            <span class="material-symbols-outlined text-4xl text-[#38e07b] mb-4">local_police</span>
+                            <h4 class="text-white font-bold mb-2">Relatórios</h4>
+                            <p class="text-[#9eb7a8] text-sm">Se algo não parecer certo, você pode relatar incidentes diretamente pelo aplicativo para nossa equipe de segurança.</p>
+                        </div>
+                        <div class="bg-[#29382f] rounded-lg p-6 text-center">
+                            <span class="material-symbols-outlined text-4xl text-[#38e07b] mb-4">medical_services</span>
+                            <h4 class="text-white font-bold mb-2">Assistência médica</h4>
+                            <p class="text-[#9eb7a8] text-sm">Em caso de emergência médica, nossos motoristas são treinados em primeiros socorros básicos.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="bg-[#1c2620]">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12 text-center text-[#9eb7a8]">
+                <div class="flex justify-center items-center gap-4 mb-6">
+                    <span class="material-symbols-outlined text-3xl text-[#38e07b]">accessible_forward</span>
+                    <h2 class="text-xl font-bold text-white">AccessRide</h2>
+                </div>
+                <div class="flex flex-wrap items-center justify-center gap-6 mb-6">
+                    <a class="text-sm hover:text-white transition-colors" href="#">
+                        Política de Privacidade</a>
+                    <a class="text-sm hover:text-white transition-colors" href="#">Termos de Serviço</a>
+                    <a class="text-sm hover:text-white transition-colors" href="#">
+                        Contate-nos</a>
+                </div>
+                <p class="text-sm">© 2025 AccessRide. Todos os direitos reservados.</p>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>
