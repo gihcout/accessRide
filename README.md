@@ -16,7 +16,7 @@ This project is a web application for AccessRide, providing various functionalit
   - **/atividades.html**: Page for activities.
   - **/cadastro.html**: Page for user registration.
   - **/corrida.html**: Page for rides.
-  - **/home.html**: Home page of the application.
+  - **/index.html**: index page of the application.
   - **/login.html**: Page for user login.
   - **/segurança.html**: Page for security information.
   - **./sobre.html**: Page providing information about the application.
