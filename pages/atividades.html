@@ -1,59 +1,19 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AccessRide - Área do Motorista</title>
-  <link rel="icon" href="/assets/img/cadeira.png">
-  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
-  <style>
-    :root {
-      --placard-color: #1E90FF;
-    }
-    body {
-      font-family: "Spline Sans", "Noto Sans", sans-serif;
-    }
-  </style>
-</head>
+  <head>
+      <!-- Tailwind -->
+      <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+      <!-- CSS externo -->
+      <link rel="stylesheet" href="../assets/css/main.css">
+
+      <!-- JS externo -->
+      <script src="../assets/js/main.js" defer></script>
+  </head>
+
 <body class="bg-[#111714] text-white">
   <div class="flex flex-col min-h-screen">
-    <!-- Header -->
-     <header class="sticky top-0 z-50 w-full bg-[#111714]/80 backdrop-blur-sm">
-            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex h-16 items-center justify-between">
-                    <div class="flex items-center gap-4 text-white">
-                        <span class="material-symbols-outlined text-3xl text-[#38e07b]">accessible_forward</span>
-                        <a href="/home.html">
-                        <h1 class="text-xl font-bold tracking-tight">AccessRide</h1>
-                    </div>
-                    <nav class="hidden md:flex items-center gap-8">
-                        <a class="text-sm font-medium text-gray-300 hover:text-white transition-colors" href="/home.html">
-                            Home</a>
-                        <a class="text-sm font-medium text-gray-300 hover:text-white transition-colors" href="./viajar.html">
-                            Viajar</a>
-                        <a class="text-sm font-medium text-gray-300 hover:text-white transition-colors" href="./segurança.html">
-                            Segurança</a>
-                        <a class="text-sm font-medium text-white hover:text-white transition-colors"
-                            href="./atividades.html">Atividades</a>
-                        <a class="text-sm font-medium text-gray-300 hover:text-white transition-colors" href="./sobre.html">
-                            Sobre nós</a>
-                    </nav>
-                    <div class="flex items-center gap-2">
-                        <a href="./login.html"
-                            class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-[#29382f] text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-gray-700 transition-colors">
-                            <span class="truncate">Conecte-se</span>
-                        </a>
-                        <button 
-                        
-                            class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-[#38e07b] text-[#111714] text-sm font-bold leading-normal tracking-[0.015em] hover:bg-green-400 transition-colors">
-                            <a href="./viajar.html" class="truncate">
-                                Solicite uma carona</a>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </header>
+    <div id="header"></div> 
 
     <!-- Main Content -->
     <main class="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -67,6 +27,7 @@
               <span class="text-sm">Finalizada</span>
             </div>
           </div>
+
           <div class="flex gap-4">
             <button class="bg-[#38e07b] text-[#111714] px-4 py-2 rounded-lg font-medium">Recibo</button>
             <button class="bg-[#29382f] px-4 py-2 rounded-lg font-medium">Deletar</button>
@@ -81,28 +42,33 @@
             <div class="p-3 rounded-lg bg-[#29382f]">
               <span class="material-symbols-outlined text-[#38e07b]">payments</span>
             </div>
+
             <div>
               <p class="text-[#9eb7a8] text-sm">Preço</p>
               <p class="text-xl font-bold">R$ 21,50</p>
             </div>
           </div>
         </div>
+
         <div class="bg-[#1c2620] rounded-xl p-6">
           <div class="flex items-center gap-4">
             <div class="p-3 rounded-lg bg-[#29382f]">
               <span class="material-symbols-outlined text-[#38e07b]">directions_car</span>
             </div>
+
             <div>
               <p class="text-[#9eb7a8] text-sm">Tipo de Corrida</p>
               <p class="text-xl font-bold">Cadeira de Rodas</p>
             </div>
           </div>
         </div>
+
         <div class="bg-[#1c2620] rounded-xl p-6">
           <div class="flex items-center gap-4">
             <div class="p-3 rounded-lg bg-[#29382f]">
               <span class="material-symbols-outlined text-[#38e07b]">star</span>
             </div>
+
             <div>
               <p class="text-[#9eb7a8] text-sm">Avaliação</p>
               <p class="text-xl font-bold">4.8</p>
@@ -119,21 +85,25 @@
             <div class="p-2 rounded-lg bg-[#29382f]">
               <span class="material-symbols-outlined text-[#38e07b]">person</span>
             </div>
+
             <div>
               <p class="font-medium">Maria Silva</p>
               <p class="text-[#9eb7a8] text-sm">5 estrelas (42 avaliações)</p>
             </div>
           </div>
+
           <div class="flex flex-col space-y-2">
             <div class="flex items-center gap-2">
               <span class="material-symbols-outlined text-[#38e07b] text-sm">room</span>
               <span>Av. Paulista, 1000 - São Paulo/SP</span>
             </div>
+
             <div class="flex items-center gap-2">
               <span class="material-symbols-outlined text-[#38e07b] text-sm">flag</span>
               <span>Shopping Morumbi - São Paulo/SP</span>
             </div>
           </div>
+
           <div class="pt-4">
             <button class="w-full bg-[#38e07b] text-[#111714] py-3 rounded-lg font-bold">
               Finalizada
@@ -151,15 +121,18 @@
             <h3 class="font-bold mb-2">Toyota Corolla Acessível</h3>
             <p class="text-[#9eb7a8] text-sm">Placa: ABC1D23</p>
           </div>
+
           <div class="space-y-4">
             <div>
               <p class="text-[#9eb7a8] text-sm">Capacidade</p>
               <p>1 cadeira de rodas + 3 passageiros</p>
             </div>
+
             <div>
               <p class="text-[#9eb7a8] text-sm">Equipamentos</p>
               <p>Rampa de acesso, cinto de segurança para cadeira de rodas</p>
             </div>
+
             <div>
               <p class="text-[#9eb7a8] text-sm">Documentação</p>
               <p class="text-[#38e07b]">Todos os documentos em dia</p>
@@ -169,24 +142,8 @@
       </div>
     </main>
 
-   
-
-     <footer class="bg-[#1c2620]">
-            <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12 text-center text-[#9eb7a8]">
-                <div class="flex justify-center items-center gap-4 mb-6">
-                    <span class="material-symbols-outlined text-3xl text-[#38e07b]">accessible_forward</span>
-                    <h2 class="text-xl font-bold text-white">AccessRide</h2>
-                </div>
-                <div class="flex flex-wrap items-center justify-center gap-6 mb-6">
-                    <a class="text-sm hover:text-white transition-colors" href="#">
-                        Política de Privacidade</a>
-                    <a class="text-sm hover:text-white transition-colors" href="#">Termos de Serviço</a>
-                    <a class="text-sm hover:text-white transition-colors" href="#">
-                        Contate-nos</a>
-                </div>
-                <p class="text-sm">© 2025 AccessRide. Todos os direitos reservados.</p>
-            </div>
-        </footer>
+    <div id="footer"></div>
+        
   </div>
 </body>
 </html>

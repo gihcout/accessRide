@@ -1,66 +1,25 @@
-<html>
+<html lang="pt-BR">
+  <head>
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 
-<head>
-  <meta charset="utf-8" />
-  <link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect" />
-  <link as="style"
-    href="https://fonts.googleapis.com/css2?display=swap&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900&amp;family=Spline+Sans%3Awght%40400%3B500%3B700"
-    onload="this.rel='stylesheet'" rel="stylesheet" />
-  <meta charset="utf-8" />
-  <link rel="icon" href="./img/cadeira.png">
-  <title>AccessRide</title>
-  <link href="data:image/x-icon;base64," rel="icon" type="image/x-icon" />
-  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
-  <style type="text/tailwindcss">
-    :root {
-            --placard-color: #1E90FF;
-          }
-        </style>
-</head>
+    <!-- CSS externo -->
+    <link rel="stylesheet" href="assets/css/main.css">
 
-<body class="bg-[#111714]">
-  <div class="relative flex size-full min-h-screen flex-col dark group/design-root overflow-x-hidden"
-    style='font-family: "Spline Sans", "Noto Sans", sans-serif;'>
-    <header class="sticky top-0 z-50 w-full bg-[#111714]/80 backdrop-blur-sm">
-      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex h-16 items-center justify-between">
-          <div class="flex items-center gap-4 text-white">
-            <span class="material-symbols-outlined text-3xl text-[#38e07b]">accessible_forward</span>
-            <a href="/home.html">
-              <h1 class="text-xl font-bold tracking-tight">AccessRide</h1>
-          </div>
-          <nav class="hidden md:flex items-center gap-8">
-            <a class="text-sm font-medium text-white hover:text-white transition-colors" href="/home.html">
-              Home</a>
-            <a class="text-sm font-medium text-gray-300 hover:text-white transition-colors" href="pages/viajar.html">
-              Viajar</a>
-            <a class="text-sm font-medium text-gray-300 hover:text-white transition-colors"
-              href="pages/segurança.html">Segurança</a>
-            <a class="text-sm font-medium text-gray-300 hover:text-white transition-colors"
-              href="pages/atividades.html">Atividades</a>
-            <a class="text-sm font-medium text-gray-300 hover:text-white transition-colors" href="pages./sobre.html">
-              Sobre nós</a>
-          </nav>
-          <div class="flex items-center gap-2">
-            <button
-              class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-[#29382f] text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-gray-700 transition-colors">
-              <a href="./pages/login.html" class="truncate">Conecte-se</a>
-            </button>
-            <button
-              class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-[#38e07b] text-[#111714] text-sm font-bold leading-normal tracking-[0.015em] hover:bg-green-400 transition-colors">
-              <a href="./pages/viajar.html" class="truncate">
-                Solicite uma carona</a>
-            </button>
-          </div>
-        </div>
-      </div>
-    </header>
-    <main class="flex-grow">
+    <!-- JS externo -->
+    <script src="assets/js/main.js" defer></script>
+  </head>
+
+  <body class="bg-[#111714] font-[Spline_Sans]">
+    <div class="relative flex size-full min-h-screen flex-col dark group/design-root overflow-x-hidden">
+    <div id="header"></div>
+
+      <main class="flex-grow">
       <section class="relative min-h-[60vh] flex items-center justify-center text-white text-center px-4" id="home">
         <div class="absolute inset-0 bg-cover bg-center"
           style='background-image: linear-gradient(rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.8) 100%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuDBjArHwHL5qj32QLZZwQDagAEJgJvOlP8-nHeXw_KKy-Wvq7E-sg1t7UlPUoSEYql2uI8qw9gmACxZAAoAO4iTTkQuJBmNRd5CFk-5lfGLvChTmQGY9hjlXKi5Fe2DFd9h6ZCLEXRyRN6wORiF1FvYzyPhyeXIU1b5IKTnoBR3XoZQuNC1_LYQ8vnNiGlDMKEuDwjCBF3kkoErZyQkG1BpKfxVS1IzBKGWsOKiIacKAiCpFBB_7erjFtpKsuUtrSmDLsbS0uheXOi1");'>
         </div>
+
         <div class="relative z-10 max-w-3xl mx-auto">
           <h1 class="text-5xl md:text-7xl font-black tracking-tighter mb-4">
             Sua Cidade, Acessível</h1>
@@ -73,6 +32,7 @@
           </button>
         </div>
       </section>
+
       <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
         <section class="mb-16 sm:mb-24" id="services">
           <h2 class="text-3xl font-bold text-white mb-8 text-center">
@@ -86,6 +46,7 @@
               <p class="text-[#9eb7a8] text-sm">Veículos com rampas ou elevadores para acomodar cadeiras de rodas e
                 dispositivos de mobilidade.</p>
             </div>
+
             <div class="flex flex-col gap-4 rounded-lg bg-[#1c2620] p-6 text-center">
               <img alt="Enhanced Legroom Sedan" class="w-full h-48 object-cover rounded-lg mb-4"
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuCoRTcjYSFDTm_Ff-a5tcfWY5y-fuzmY7_-1_ANzpl6Kaa9kUQp-MZUk3X8WcB7ystm7iMnBlU8aT0ZmmCzwf76bcLO6V3XnZNKlaS06qP3ZYhF0dWa43J5W7oteDt4Yp3h468PGqY6cyzoSExTfQoNrqXs-35oFuLewhT2dapnng6fp7cLUftZEmWJn-UftcXAI60d6S3lYMfQOI42Y-gPhpGCw_7qHz8CehDfH5AGgSa57jRLa4fvrRitN0ZAY19vRbyqwmBByAaB" />
@@ -93,6 +54,7 @@
               <p class="text-[#9eb7a8] text-sm">Sedans com mais espaço para as pernas e portas mais largas para
                 facilitar o acesso.</p>
             </div>
+
             <div class="flex flex-col gap-4 rounded-lg bg-[#1c2620] p-6 text-center">
               <img alt="Foldable Seat Minivan" class="w-full h-48 object-cover rounded-lg mb-4"
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZR5oRSvTDDPRCuZDTp4jLD7fvg6p2s_s-H2dEt_SSDknv_LZmlUYlbESvzVy0NPs_Xw3mukn7ufddtp-_LB8UPAHYPHDpe4OvJJD7NWf-gnV_qet_5yA5yIWFWITfNdiAm1c43ST6peNt__yhS7J_991fnq4g7wVDmMfDmGHOHfM-f7Vpb1v5zZHm5JNcxiJEdLgVQ1x86o83sa3Ung_kecCe_zO07HgYJMoEOGYJ_vJb61x6cNczOJM0sgUglGBcsBf4MHAcLzLS" />
@@ -103,6 +65,7 @@
             </div>
           </div>
         </section>
+
         <section class="max-w-4xl mx-auto grid md:grid-cols-2 gap-12 items-center mb-16 sm:mb-24">
           <div class="space-y-6">
             <h2 class="text-3xl font-bold text-white">
@@ -116,6 +79,7 @@
                 <option>Suporte para Deficiência Auditiva</option>
                 <option>Animal de serviço</option>
               </select>
+
               <select
                 class="form-select w-full rounded-xl text-white bg-[#29382f] border-none focus:ring-[#38e07b] h-14 p-4 text-base">
                 <option selected="">Selecione o equipamento</option>
@@ -124,6 +88,7 @@
                 <option>
                   Caminhante</option>
               </select>
+
               <input
                 class="form-input w-full rounded-xl text-white bg-[#29382f] border-none focus:ring-[#38e07b] h-14 placeholder:text-[#9eb7a8] p-4 text-base"
                 placeholder="Local de Partida" />
@@ -131,11 +96,13 @@
                 class="form-input w-full rounded-xl text-white bg-[#29382f] border-none focus:ring-[#38e07b] h-14 placeholder:text-[#9eb7a8] p-4 text-base"
                 placeholder="Local de Chegada" />
             </div>
+
             <button
               class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-12 px-6 bg-[#38e07b] text-[#111714] text-base font-bold leading-normal tracking-[0.015em] hover:bg-green-400 transition-colors">
               <a href="./pages/viajar.html" class="truncate">Ver Preço</a>
             </button>
           </div>
+
           <div class="space-y-6">
             <h2 class="text-3xl font-bold text-white">
               Como funciona o AccessRide</h2>
@@ -150,6 +117,7 @@
                 <p class="text-[#9eb7a8]">
                   Especifique suas necessidades de acessibilidade e equipamentos no aplicativo.</p>
               </div>
+
               <div class="relative mb-8">
                 <div
                   class="absolute -left-10 top-0.5 flex size-8 items-center justify-center rounded-full bg-[#38e07b] text-[#111714]">
@@ -159,6 +127,7 @@
                 <p class="text-[#9eb7a8]">
                   Nossos motoristas treinados chegarão em um veículo adequado e acessível.</p>
               </div>
+
               <div class="relative">
                 <div
                   class="absolute -left-10 top-0.5 flex size-8 items-center justify-center rounded-full bg-[#38e07b] text-[#111714]">
@@ -171,6 +140,7 @@
             </div>
           </div>
         </section>
+
         <section class="mb-16 sm:mb-24" id="safety">
           <h2 class="text-3xl font-bold text-white mb-8 text-center">
             Segurança e Confiança</h2>
@@ -182,12 +152,14 @@
               <p class="text-[#9eb7a8] text-sm">Todos os motoristas passam por rigorosas verificações de antecedentes e
                 treinamento especializado em acessibilidade.</p>
             </div>
+
             <div class="flex flex-col items-center gap-4 text-center rounded-lg bg-[#1c2620] p-6">
               <span class="material-symbols-outlined text-4xl text-[#38e07b]">groups</span>
               <h3 class="text-xl font-bold text-white">Apoio Comunitário</h3>
               <p class="text-[#9eb7a8] text-sm">Nós promovemos uma comunidade solidária e inclusiva para passageiros e
                 motoristas.</p>
             </div>
+
             <div class="flex flex-col items-center gap-4 text-center rounded-lg bg-[#1c2620] p-6">
               <span class="material-symbols-outlined text-4xl text-[#38e07b]">grade</span>
               <h3 class="text-xl font-bold text-white">
@@ -197,6 +169,7 @@
             </div>
           </div>
         </section>
+
         <section
           class="bg-[#1c2620] rounded-xl p-8 sm:p-12 flex flex-col md:flex-row items-center justify-between gap-8 mb-16 sm:mb-24"
           id="drivers">
@@ -207,11 +180,13 @@
               comunidade. Oferecemos horários flexíveis, salários competitivos e a oportunidade de prestar um serviço
               essencial.</p>
           </div>
+
           <button
             class="flex-shrink-0 min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-12 px-6 bg-[#38e07b] text-[#111714] text-base font-bold leading-normal tracking-[0.015em] hover:bg-green-400 transition-colors">
             <span class="truncate">Inscreva-se agora</span>
           </button>
         </section>
+
         <section class="mb-16 sm:mb-24" id="testimonials">
           <h2 class="text-3xl font-bold text-white mb-8 text-center">O que nossos pilotos estão dizendo</h2>
           <div class="relative">
@@ -225,12 +200,14 @@
                     <span class="material-symbols-outlined text-[#38e07b]">star</span>
                     <span class="material-symbols-outlined text-[#38e07b]">star</span>
                   </div>
+
                   <blockquote class="text-[#9eb7a8] italic mb-4">"O AccessRide foi uma salvação. Os motoristas são muito
                     prestativos e os veículos estão sempre limpos e bem equipados para minha cadeira de rodas.
                     Finalmente recuperei minha independência."</blockquote>
                   <cite class="text-white font-bold not-italic">Sarah L.</cite>
                 </div>
               </div>
+
               <div class="snap-center w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.333rem)] flex-shrink-0">
                 <div class="bg-[#1c2620] rounded-lg p-6 h-full flex flex-col justify-between">
                   <div class="flex items-center mb-2">
@@ -240,12 +217,14 @@
                     <span class="material-symbols-outlined text-[#38e07b]">star</span>
                     <span class="material-symbols-outlined text-[#38e07b]">star</span>
                   </div>
+
                   <blockquote class="text-[#9eb7a8] italic mb-4">"Como pessoa com deficiência visual, aprecio os
                     recursos de acessibilidade do aplicativo. É fácil de usar e me sinto seguro sabendo que os
                     motoristas são treinados para me ajudar."</blockquote>
                   <cite class="text-white font-bold not-italic">David C.</cite>
                 </div>
               </div>
+
               <div class="snap-center w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.333rem)] flex-shrink-0">
                 <div class="bg-[#1c2620] rounded-lg p-6 h-full flex flex-col justify-between">
                   <div class="flex items-center mb-2">
@@ -255,12 +234,14 @@
                     <span class="material-symbols-outlined text-[#38e07b]">star</span>
                     <span class="material-symbols-outlined text-gray-500">star</span>
                   </div>
+
                   <blockquote class="text-[#9eb7a8] italic mb-4">"Finalmente, um serviço de transporte que pode acomodar
                     toda a minha família e o andador do meu filho sem complicações. As minivans são espaçosas e os
                     motoristas são pacientes."</blockquote>
                   <cite class="text-white font-bold not-italic">Maria G.</cite>
                 </div>
               </div>
+
               <div class="snap-center w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.333rem)] flex-shrink-0">
                 <div class="bg-[#1c2620] rounded-lg p-6 h-full flex flex-col justify-between">
                   <div class="flex items-center mb-2">
@@ -277,12 +258,14 @@
                 </div>
               </div>
             </div>
+
             <div class="absolute inset-y-0 left-0 hidden md:flex items-center">
               <button
                 class="bg-[#1c2620] rounded-full p-2 text-white hover:bg-[#38e07b] hover:text-[#111714] transition-colors -ml-4">
                 <span class="material-symbols-outlined">chevron_left</span>
               </button>
             </div>
+
             <div class="absolute inset-y-0 right-0 hidden md:flex items-center">
               <button
                 class="bg-[#1c2620] rounded-full p-2 text-white hover:bg-[#38e07b] hover:text-[#111714] transition-colors -mr-4">
@@ -291,6 +274,7 @@
             </div>
           </div>
         </section>
+
         <section class="max-w-3xl mx-auto text-center mb-16 sm:mb-24" id="about">
           <h2 class="text-3xl font-bold text-white mb-4">Baixe o aplicativo AccessRide</h2>
           <p class="text-[#9eb7a8] mb-8">Comece a usar o AccessRide hoje mesmo. O futuro do transporte acessível está ao
@@ -301,6 +285,7 @@
               <span class="truncate">
                 Baixe na App Store</span>
             </button>
+
             <button
               class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-12 px-6 bg-[#29382f] text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-gray-700 transition-colors">
               <span class="truncate">
@@ -308,6 +293,7 @@
             </button>
           </div>
         </section>
+
         <section class="max-w-3xl mx-auto">
           <h2 class="text-3xl font-bold text-white mb-8 text-center">
             Perguntas frequentes</h2>
@@ -321,6 +307,7 @@
                 com acesso para cadeira de rodas, sedãs com espaço para as pernas e minivans com assentos dobráveis.
                 Você pode especificar suas necessidades e equipamentos ao solicitar uma viagem.</p>
             </details>
+
             <details class="group bg-[#29382f] rounded-xl p-4 cursor-pointer">
               <summary class="flex items-center justify-between text-white font-medium list-none">
                 Como posso solicitar uma viagem acessível? <span
@@ -330,6 +317,7 @@
                 opções de acessibilidade desejadas no menu "Personalizar Viagem" antes de confirmar sua solicitação. O
                 aplicativo conectará você automaticamente a um motorista e veículo adequados.</p>
             </details>
+
             <details class="group bg-[#29382f] rounded-xl p-4 cursor-pointer">
               <summary class="flex items-center justify-between text-white font-medium list-none">
                 Quais medidas de segurança estão em vigor? <span
@@ -342,25 +330,12 @@
             </details>
           </div>
         </section>
+        
       </div>
     </main>
-    <footer class="bg-[#1c2620]">
-      <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12 text-center text-[#9eb7a8]">
-        <div class="flex justify-center items-center gap-4 mb-6">
-          <span class="material-symbols-outlined text-3xl text-[#38e07b]">accessible_forward</span>
-          <h2 class="text-xl font-bold text-white">AccessRide</h2>
-        </div>
-        <div class="flex flex-wrap items-center justify-center gap-6 mb-6">
-          <a class="text-sm hover:text-white transition-colors" href="#">
-            Política de Privacidade</a>
-          <a class="text-sm hover:text-white transition-colors" href="#">Termos de Serviço</a>
-          <a class="text-sm hover:text-white transition-colors" href="#">
-            Contate-nos</a>
-        </div>
-        <p class="text-sm">© 2025 AccessRide. Todos os direitos reservados.</p>
-      </div>
-    </footer>
-  </div>
-</body>
 
+    <div id="footer"></div>
+
+    </div>
+  </body>
 </html>
