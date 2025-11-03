@@ -32,6 +32,7 @@ const carIcon = L.divIcon({
 const btnTracar = el('btnTracar'),
       btnConfirm = el('btnConfirm'),
       btnAjuda = el('btnAjuda');
+      closeModalBtn = el('closeModal');
 
 const modal = el('modal'),
       modalProcurando = el('modalProcurando'),
@@ -44,17 +45,52 @@ const modal = el('modal'),
 // botão cancelar está dentro do modalEncontrado — buscar seguro
 const cancelModalBtn = el('cancelModal');
 
+// ---------- Fechar modal com o "X" ----------
+if (closeModalBtn) {
+  closeModalBtn.addEventListener('click', () => {
+    modal.classList.add('modal-hidden');
+
+    // Caso a animação esteja rodando, pausa
+    if (animationInterval) {
+      clearInterval(animationInterval);
+      animationInterval = null;
+    }
+
+    // Cancela estado se estiver no meio de uma corrida
+    corridaCancelada = true;
+    toggleCamposViagem(false);
+    setButtonState('preRota');
+  });
+}
+
 // Função global de alerta estilizado
 function showAlert(message) {
   const modal = document.getElementById('alertModal');
   const msg = document.getElementById('alertMessage');
   const ok = document.getElementById('alertOk');
-  
+  const close = document.getElementById('closeAlert');
+
   msg.textContent = message;
   modal.classList.remove('hidden');
-  
-  ok.onclick = () => {
-    modal.classList.add('hidden');
+
+  const fechar = () => modal.classList.add('hidden');
+  ok.onclick = fechar;
+  close.onclick = fechar;
+}
+
+function ensureCloseButton() {
+  let btn = document.getElementById('closeModal');
+  if (!btn) return;
+  btn.onclick = () => {
+    modal.classList.add('modal-hidden');
+
+    if (animationInterval) {
+      clearInterval(animationInterval);
+      animationInterval = null;
+    }
+    corridaCancelada = true;
+    toggleCamposViagem(false);
+    setButtonState('preRota');
   };
 }
 
@@ -199,6 +235,7 @@ btnConfirm.addEventListener('click', () => {
 
   // Exibe modal de procurando
   modal.classList.remove('modal-hidden');
+  ensureCloseButton();
   modalProcurando.classList.remove('hidden');
   modalEncontrado.classList.add('hidden');
   modalTextoBusca.textContent = `Procurando motorista com veículo: ${modelo}...`;
@@ -498,7 +535,7 @@ function finalizarCorrida() {
     <button id="btnEnviarAvaliacao" class="mt-3 py-2 px-4 bg-[#38e07b] text-[#111714] font-bold rounded-lg hover:bg-green-400">Enviar Avaliação</button>
   `;
   modalProcurando.classList.remove('hidden');
-
+  ensureCloseButton();
   setButtonState('pósViagem');
   toggleCamposViagem(false);
   configurarAvaliacao();

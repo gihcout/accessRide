@@ -93,3 +93,14 @@
 .animate-fadeIn {
     animation: fadeIn 0.2s ease-out;
 }
+
+#closeModal,
+#closeAlert {
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+#closeModal:hover,
+#closeAlert:hover {
+    color: #38e07b;
+    transform: scale(1.2);
+}
