@@ -16,9 +16,8 @@ let partidaCoords = null,
     animationInterval = null,    // interval usado para animar o motorista
     animationElapsed = 0,        // tempo acumulado da animação (para progressos)
     routeTraveled = null,        // parte da rota já percorrida
-    routeRemaining = null;       // parte da rota restante
-    corridaCancelada = false;   // indica se o usuário cancelou a corrida
-
+    routeRemaining = null,       // parte da rota restante
+    corridaCancelada = false;    // indica se o usuário cancelou a corrida
 
 // Ícone do carro (usando emoji para consistência com seu projeto)
 const carIcon = L.divIcon({
@@ -31,7 +30,7 @@ const carIcon = L.divIcon({
 // ---------- Botões / Modais ----------
 const btnTracar = el('btnTracar'),
       btnConfirm = el('btnConfirm'),
-      btnAjuda = el('btnAjuda');
+      btnAjuda = el('btnAjuda'),
       closeModalBtn = el('closeModal');
 
 const modal = el('modal'),
@@ -42,7 +41,6 @@ const modal = el('modal'),
       tempoRestante = el('tempoRestante'),
       infoMotorista = el('infoMotorista');
 
-// botão cancelar está dentro do modalEncontrado — buscar seguro
 const cancelModalBtn = el('cancelModal');
 
 // ---------- Fechar modal com o "X" ----------
@@ -50,13 +48,11 @@ if (closeModalBtn) {
   closeModalBtn.addEventListener('click', () => {
     modal.classList.add('modal-hidden');
 
-    // Caso a animação esteja rodando, pausa
     if (animationInterval) {
       clearInterval(animationInterval);
       animationInterval = null;
     }
 
-    // Cancela estado se estiver no meio de uma corrida
     corridaCancelada = true;
     toggleCamposViagem(false);
     setButtonState('preRota');
@@ -65,15 +61,15 @@ if (closeModalBtn) {
 
 // Função global de alerta estilizado
 function showAlert(message) {
-  const modal = document.getElementById('alertModal');
+  const modalAlert = document.getElementById('alertModal');
   const msg = document.getElementById('alertMessage');
   const ok = document.getElementById('alertOk');
   const close = document.getElementById('closeAlert');
 
   msg.textContent = message;
-  modal.classList.remove('hidden');
+  modalAlert.classList.remove('hidden');
 
-  const fechar = () => modal.classList.add('hidden');
+  const fechar = () => modalAlert.classList.add('hidden');
   ok.onclick = fechar;
   close.onclick = fechar;
 }
@@ -83,7 +79,6 @@ function ensureCloseButton() {
   if (!btn) return;
   btn.onclick = () => {
     modal.classList.add('modal-hidden');
-
     if (animationInterval) {
       clearInterval(animationInterval);
       animationInterval = null;
@@ -95,8 +90,12 @@ function ensureCloseButton() {
 }
 
 // ---------- Funções auxiliares ----------
+function tocarNotificacao() {
+  const audio = new Audio('https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg'); 
+  audio.volume = 0.3; // volume baixo
+  audio.play();
+}
 
-// Controla visibilidade dos botões conforme estado
 function setButtonState(state) {
   // estados: 'preRota', 'rotaTraçada', 'viagemConfirmada', 'motoristaACaminho', 'motoristaChegou', 'emViagem', 'pósViagem'
   btnTracar.classList.toggle('hidden', !(state === 'preRota' && state !== 'rotaTraçada'));
@@ -104,7 +103,6 @@ function setButtonState(state) {
   btnAjuda.classList.toggle('hidden', !(state === 'motoristaChegou' || state === 'emViagem'));
 }
 
-// Simples geocoding via Nominatim (OpenStreetMap).
 async function geocode(local) {
   const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(local)}`);
   const data = await res.json();
@@ -112,7 +110,6 @@ async function geocode(local) {
   return [parseFloat(data[0].lat), parseFloat(data[0].lon)];
 }
 
-// Escolhe modelo com base em necessidades/equipamentos
 function escolherModelo() {
   const need = el('need').value.toLowerCase();
   const equip = el('equip').value.toLowerCase();
@@ -121,7 +118,6 @@ function escolherModelo() {
   return "Sedan";
 }
 
-// Escolhe o motorista com base em necessidades/equipamentos
 function escolherMotorista() {
   const modelo = escolherModelo();
   if (modelo === "Minivan Acessível") return "Carlos S.";
@@ -129,7 +125,6 @@ function escolherMotorista() {
   return "João M.";
 }
 
-// Apresenta a nota do motorista com base no modelo escolhido
 function escolherNotaMotorista() {
   const modelo = escolherModelo();
   if (modelo === "Minivan Acessível") return "4.9 ★";
@@ -137,7 +132,6 @@ function escolherNotaMotorista() {
   return "4.7 ★";
 }
 
-// Remove controle L.Routing.control antigo com segurança
 function removerControle(ctrl) {
   try {
     if (ctrl && typeof ctrl.remove === 'function') ctrl.remove();
@@ -146,11 +140,10 @@ function removerControle(ctrl) {
   }
 }
 
-// Formata tempo restante para mm:ss
 function formatMinuteSecond(sec) {
   const m = Math.floor(sec / 60);
   const s = sec % 60;
-  return `${m}:${s.toString().padStart(2,'0')}`;
+  return `${m}:${s.toString().padStart(2, '0')}`;
 }
 
 // ---------- Evento: Traçar rota (Ver preço) ----------
@@ -167,8 +160,6 @@ btnTracar.addEventListener('click', async () => {
   if (!partidaTxt || !destinoTxt)
     return showAlert("Preencha partida e destino para continuar.");
 
-
-  // Limpar rotas anteriores
   removerControle(control);
   control = null;
 
@@ -179,14 +170,13 @@ btnTracar.addEventListener('click', async () => {
     return showAlert("Não foi possível localizar os endereços");
   }
 
-  // Criar novo controle de rota (principal)
   control = L.Routing.control({
     waypoints: [L.latLng(...partidaCoords), L.latLng(...destinoCoords)],
     lineOptions: { styles: [{ color: '#064d22ff', weight: 5 }] },
     routeWhileDragging: false,
     createMarker: () => null,
     addWaypoints: false,
-    show: false, // 🔹 desativa o painel de instruções
+    show: false,
   })
   .on('routesfound', e => {
     const rota = e.routes[0];
@@ -196,8 +186,6 @@ btnTracar.addEventListener('click', async () => {
     el('valor').textContent = `Valor estimado: R$ ${valor}`;
     el('resultado').classList.remove('hidden');
     setButtonState('rotaTraçada');
-
-    // garante que o mapa renderize corretamente 
     setTimeout(() => map.invalidateSize(), 250);
   })
   .addTo(map);
@@ -208,13 +196,13 @@ function toggleCamposViagem(bloquear) {
   const campos = ['need', 'equip', 'partida', 'destino', 'tipoSolicitacao'];
   campos.forEach(id => {
     const campo = el(id);
-    if (campo) campo.disabled = bloquear; // true = bloqueia; false = libera
+    if (campo) campo.disabled = bloquear;
   });
 }
 
 // ---------- Evento: Confirmar viagem ----------
 btnConfirm.addEventListener('click', () => {
-  corridaCancelada = false; // reset no início de uma nova corrida
+  corridaCancelada = false;
 
   const need = el('need').value;
   const equip = el('equip').value;
@@ -227,65 +215,145 @@ btnConfirm.addEventListener('click', () => {
   if (!tipo)
     return showAlert("Escolha o tipo de solicitação antes de confirmar.");
 
+  // ====== [1] Fluxo de agendamento: data e hora ======
+  if (tipo === 'agendar') {
+    let agendamentoDiv = el('agendamentoContainer');
+    if (!agendamentoDiv) {
+      agendamentoDiv = document.createElement('div');
+      agendamentoDiv.id = 'agendamentoContainer';
+      agendamentoDiv.className = 'mt-6';
+      agendamentoDiv.innerHTML = `
+        <label class="block text-white mb-2">Data e hora da partida</label>
+        <input id="dataHoraAgendada" type="datetime-local"
+               class="w-full bg-[#29382f] text-white rounded-lg p-3">
+      `;
+      el('tipoSolicitacao').parentNode.insertAdjacentElement('afterend', agendamentoDiv);
+    }
+
+    // Se o campo ainda não estiver preenchido
+    if (agendamentoDiv.classList.contains('hidden') || !el('dataHoraAgendada')) {
+      agendamentoDiv.classList.remove('hidden');
+      return showAlert("Escolha a data e hora desejadas e clique em Confirmar novamente.");
+    }
+    const dataInput = el('dataHoraAgendada');
+    if (!dataInput.value)
+      return showAlert("Informe uma data e hora válidas para agendar sua carona.");
+
+    // Esconde o bloco após o preenchimento
+    agendamentoDiv.classList.add('hidden');
+  }
+
+  // ====== [2] Dados comuns ======
   const modelo = escolherModelo();
   const motorista = escolherMotorista();
   const nota = escolherNotaMotorista();
-  // tempoBusca em centenas de ms: flexivel simulated 20-59 *100ms -> ~2s-6s; agendar 1.5s
   const tempoBusca = tipo === 'flexivel' ? Math.floor(Math.random() * 40 + 20) : 15;
 
-  // Exibe modal de procurando
   modal.classList.remove('modal-hidden');
   ensureCloseButton();
   modalProcurando.classList.remove('hidden');
   modalEncontrado.classList.add('hidden');
-  modalTextoBusca.textContent = `Procurando motorista com veículo: ${modelo}...`;
+
+  modalTextoBusca.textContent = tipo === 'agendar'
+    ? `Buscando motorista disponível para o horário agendado...`
+    : `Procurando motorista com veículo: ${modelo}...`;
 
   setButtonState('viagemConfirmada');
   toggleCamposViagem(true);
-
-  // Se o usuário clicar em cancelar, lidar
   setupCancelHandler();
 
-  // Simula busca (tempoBusca * 100ms)
+  // ====== [3] Simulação de busca ======
   setTimeout(() => {
-    // Exibe modal de motorista encontrado
     modalProcurando.classList.add('hidden');
     modalEncontrado.classList.remove('hidden');
     infoMotorista.textContent = `${motorista} — ${modelo} — ${nota}`;
 
-    // Depois de curto tempo, fechar modal e iniciar deslocamento do motorista
+    // ====== [4] Fluxo para corrida agendada ======
+    if (tipo === 'agendar') {
+      const msgConfirm = document.createElement('p');
+      msgConfirm.className = 'mt-2 text-[#9eb7a8] text-sm';
+      msgConfirm.textContent = 'Carona confirmada para o horário agendado ✅';
+      modalEncontrado.appendChild(msgConfirm);
+
+      // --- Contador regressivo até o início ---
+      const contador = document.createElement('p');
+      contador.className = 'mt-2 text-[#38e07b] text-lg font-bold transition-all duration-500';
+      modalEncontrado.appendChild(contador);
+
+      const agendado = new Date(el('dataHoraAgendada').value);
+
+      const atualizarContador = () => {
+        const agora = new Date();
+        const diff = agendado - agora;
+
+        if (diff <= 0) {
+          contador.textContent = "Motorista a caminho! Aguarde alguns minutos...";
+          contador.style.color = '#38e07b';
+          contador.style.animation = 'none';
+          clearInterval(intervaloContador);
+
+          // Fecha modal e inicia deslocamento
+          setTimeout(() => {
+            modal.classList.add('modal-hidden');
+            iniciarDeslocamentoMotorista();
+          }, 1500);
+          return;
+        }
+
+        const min = Math.floor(diff / 60000);
+        const seg = Math.floor((diff % 60000) / 1000);
+        contador.textContent = `⏳ Corrida inicia em ${min}m ${seg < 10 ? '0' + seg : seg}s...`;
+
+        // === Efeitos visuais ===
+        contador.style.color = '#38e07b'; // padrão (verde)
+        contador.style.animation = 'none';
+
+        if (diff <= 60000) {
+          // Último minuto → amarelo e piscando lento
+          contador.style.color = '#f7e45c';
+          contador.style.animation = 'piscarLento 1s infinite';
+        }
+        if (diff <= 10000) {
+          // Últimos 10 segundos → vermelho e piscando rápido
+          contador.style.color = '#ff4d4d';
+          contador.style.animation = 'piscarRapido 0.5s infinite';
+        }
+      };
+
+      atualizarContador();
+      const intervaloContador = setInterval(atualizarContador, 1000);
+
+      // Mostra alerta sem fechar modal
+      showAlert("✅ Corrida agendada! Você será notificado quando estiver próximo do horário.");
+      return; 
+    }
+
+    // ====== [5] Fluxo padrão (corrida flexível) ======
     setTimeout(() => {
       modal.classList.add('modal-hidden');
-
-      // guaranteed map re-render before anim starts
       setTimeout(() => {
         map.invalidateSize();
         iniciarDeslocamentoMotorista();
-      }, 200); // pequeno delay para o DOM atualizar
+      }, 200);
     }, 1500);
+
   }, tempoBusca * 100);
 });
+
 
 // ---------- Cancelar ----------
 function setupCancelHandler() {
   if (!cancelModalBtn) return;
-  
-  // remove listeners antigos para evitar duplicações
   cancelModalBtn.replaceWith(cancelModalBtn.cloneNode(true));
   const newCancel = el('cancelModal');
-
   newCancel.addEventListener('click', () => {
-    corridaCancelada = true; // 🔹 marca cancelamento global
+    corridaCancelada = true;
 
     modal.classList.add('modal-hidden');
-
-    // Para qualquer animação em andamento
     if (animationInterval) {
       clearInterval(animationInterval);
       animationInterval = null;
     }
-
-    // Remove marcador e polylines do mapa
     if (motoristaMarker) {
       try { map.removeLayer(motoristaMarker); } catch(e){}
       motoristaMarker = null;
@@ -294,50 +362,36 @@ function setupCancelHandler() {
       try { map.removeLayer(routePolyline); } catch(e){}
       routePolyline = null;
     }
-
-    // Remove rotas
     removerControle(driverRouter);
     driverRouter = null;
     toggleCamposViagem(false);
-
     setButtonState('preRota');
     showAlert('🚫 Corrida cancelada.');
   });
 }
 
-
 // ---------- Inicia deslocamento do motorista até o passageiro ----------
 function iniciarDeslocamentoMotorista() {
-  // segurança: precisa ter partidaCoords
   if (corridaCancelada) return console.log("❌ Corrida cancelada antes do deslocamento.");
-
-  console.log("→ iniciarDeslocamentoMotorista chamado");
   if (!partidaCoords) return console.warn('Sem coordenadas de partida.');
 
-  // remove rota temporária anterior, se houver
   removerControle(driverRouter);
   driverRouter = null;
 
-  // cria coordenadas aleatórias próximas (300-800m simulado via +/- offsets)
-  const latOffset = (Math.random() * 0.008) - 0.004; // ~ +/- 400m
+  const latOffset = (Math.random() * 0.008) - 0.004;
   const lngOffset = (Math.random() * 0.008) - 0.004;
   const motoristaCoords = [partidaCoords[0] + latOffset, partidaCoords[1] + lngOffset];
 
-  // Cria um routing control temporário para motorista -> passageiro para obter percursos reais
   driverRouter = L.Routing.control({
     waypoints: [L.latLng(...motoristaCoords), L.latLng(...partidaCoords)],
     createMarker: () => null,
-    lineOptions: { styles: [{ color: '#000000ff', weight: 4 }] },
     routeWhileDragging: false,
     addWaypoints: false,
-    show: false, 
-    lineOptions: { styles: [{ opacity: 0 }] } // linha invisível, só queremos os pontos
+    show: false,
+    lineOptions: { styles: [{ opacity: 0 }] }
   });
 
   driverRouter.on('routesfound', e => {
-    console.log("→ routesfound motorista -> passageiro");
-    console.log("🚗 Rota encontrada", e.routes[0]);
-    // Extrai polyline da rota e inicia animação
     routeCoordinates = e.routes[0].coordinates;
     if (!routeCoordinates.length) return console.warn("Sem coordenadas de rota!");
 
@@ -355,33 +409,25 @@ function iniciarDeslocamentoMotorista() {
 }
 
 // ---------- Função principal de animação ----------
-// coords: array de LatLngs
-// fase: 'toPassenger' | 'toDestination'
 function animarMotorista(coords, fase) {
-  // limpando intervalos anteriores
   if (animationInterval) clearInterval(animationInterval);
   animationElapsed = 0;
 
-  // Remove linhas antigas, se existirem
   if (routeTraveled) map.removeLayer(routeTraveled);
   if (routeRemaining) map.removeLayer(routeRemaining);
 
-  // Cria linha da rota total (restante)
   routeRemaining = L.polyline([coords[0]], { color: '#000301ff', weight: 5 }).addTo(map);
 
-  let idx = 0;         // índice do segmento atual
-  let t = 0;           // progresso entre coords[idx] e coords[idx+1] [0..1]
-
-  // parâmetros de tempo (duração total da animação em segundos)
-  const totalDurationSec = (fase === 'toPassenger') ? Math.max(10, Math.floor(coords.length / 3)) : Math.max(12, Math.floor(coords.length / 2));
-  const intervalMs = 40; // tick
+  let idx = 0, t = 0;
+  const totalDurationSec = (fase === 'toPassenger')
+    ? Math.max(10, Math.floor(coords.length / 3))
+    : Math.max(12, Math.floor(coords.length / 2));
+  const intervalMs = 40;
   const stepsTotal = Math.ceil((totalDurationSec * 1000) / intervalMs);
 
-  // controla progresso visual
   progressFill.style.width = '0%';
   setButtonState(fase === 'toPassenger' ? 'motoristaACaminho' : 'emViagem');
 
-  // Função linear interpolation
   function lerp(a, b, t) { return a + (b - a) * t; }
 
   let steps = 0;
@@ -394,74 +440,50 @@ function animarMotorista(coords, fase) {
 
     if (idx >= coords.length - 1) {
       clearInterval(animationInterval);
-
-      // remove linhas restantes
       if (routeRemaining) map.removeLayer(routeRemaining);
       if (routeTraveled) map.removeLayer(routeTraveled);
-
       animationInterval = null;
 
-      // motorista chegou ao passageiro
       if (fase === 'toPassenger') {
-        console.log("✅ Motorista chegou ao passageiro!");
         setButtonState('motoristaChegou');
-
-        // pequena pausa de 1,5s antes de iniciar corrida
         setTimeout(() => {
           iniciarCorrida();
         }, 1500);
-      }
-
-      // motorista chegou ao destino
-      else if (fase === 'toDestination') {
-        console.log("🏁 Corrida finalizada!");
+      } else if (fase === 'toDestination') {
         setButtonState('pósViagem');
         setTimeout(() => finalizarCorrida(), 1000);
       }
-
       return;
     }
 
-    // progress t across current segment based on steps
-    // aqui usamos steps/stepsTotal para mover progressivamente ao longo do total
     const globalProgress = (steps / stepsTotal) * (coords.length - 1);
     idx = Math.min(Math.floor(globalProgress), coords.length - 2);
     t = globalProgress - idx;
-
-    // Interpolação entre ponto idx e idx+1
     const a = coords[idx], b = coords[idx + 1];
     const lat = lerp(a.lat, b.lat, t);
     const lng = lerp(a.lng, b.lng, t);
 
-    // Atualiza marcador e polyline (adiciona o ponto atual como "percorrido")
     if (motoristaMarker) motoristaMarker.setLatLng([lat, lng]);
     if (routeTraveled) routeTraveled.addLatLng([lat, lng]);
-
-    // atualiza a rota restante (parte ainda não percorrida)
     if (routeRemaining) {
       const remaining = coords.slice(idx + 1);
       routeRemaining.setLatLngs(remaining);
     }
 
-
-    // Move a viewport suavemente (sem "jump")
     map.panTo([lat, lng], { animate: true, duration: 0.5 });
 
-    // Atualiza barra de progresso e tempo restante (estimativa)
     steps++;
     const pct = Math.min(100, Math.round((steps / stepsTotal) * 100));
     progressFill.style.width = `${pct}%`;
-
     animationElapsed += intervalMs / 1000;
     const restante = Math.max(0, Math.round(totalDurationSec - animationElapsed));
-    tempoRestante.textContent = fase === 'toPassenger' ? `Chegada em ${formatMinuteSecond(restante)}` : `Tempo restante ${formatMinuteSecond(restante)}`;
+    tempoRestante.textContent = fase === 'toPassenger'
+      ? `Chegada em ${formatMinuteSecond(restante)}`
+      : `Tempo restante ${formatMinuteSecond(restante)}`;
 
-    // segurança para não estourar tempo
     if (steps >= stepsTotal) {
-      // mover índice ao fim para encerrar no próximo tick
       idx = coords.length - 1;
     }
-
   }, intervalMs);
 }
 
@@ -469,50 +491,27 @@ function animarMotorista(coords, fase) {
 function iniciarCorrida() {
   if (corridaCancelada) return console.log("❌ Corrida cancelada antes de iniciar viagem.");
 
-  // remove rotas antigas para desenhar nova rota
   removerControle(driverRouter);
   driverRouter = null;
   if (routePolyline) { map.removeLayer(routePolyline); routePolyline = null; }
   if (routeTraveled) { map.removeLayer(routeTraveled); routeTraveled = null; }
   if (routeRemaining) { map.removeLayer(routeRemaining); routeRemaining = null; }
+  if (control) { try { control.remove(); } catch(e){} control = null; }
 
-
-  // Garante que control (rota do usuário) esteja removido para não conflitar
-  if (control) {
-    try { control.remove(); } catch(e) {}
-    control = null;
-  }
-
-  // Cria controle de rota motorista -> destino para obter a lista de pontos
   const routingToDest = L.Routing.control({
     waypoints: [ L.latLng(...partidaCoords), L.latLng(...destinoCoords) ],
     createMarker: () => null,
-    lineOptions: { styles: [{ color: '#064d22ff', weight: 5 }] },
-    routeWhileDragging: false,
     addWaypoints: false,
     show: false,
     lineOptions: { styles: [{ opacity: 0 }] }
   });
 
   routingToDest.on('routesfound', e => {
-    // transforma rota em lista de LatLngs
     routeCoordinates = e.routes[0].coordinates;
-
-    // posiciona motorista no início da rota (garantia)
     if (motoristaMarker) motoristaMarker.setLatLng(routeCoordinates[0]);
-
-    // remove polyline velha e cria nova para o trajeto da viagem
-    if (routePolyline) map.removeLayer(routePolyline);
     routePolyline = L.polyline([routeCoordinates[0]], { color: '#064d22ff', weight: 5 }).addTo(map);
-
-    // fit bounds para mostrar rota inteira
-    const bounds = L.latLngBounds(routeCoordinates);
-    map.fitBounds(bounds.pad(0.2));
-
-    // anima motorista na rota para o destino
+    map.fitBounds(L.latLngBounds(routeCoordinates).pad(0.2));
     animarMotorista(routeCoordinates, 'toDestination');
-
-    // limpa o controle temporário depois de obter a rota
     setTimeout(() => { try { routingToDest.remove(); } catch(e){} }, 500);
   });
 
@@ -521,10 +520,8 @@ function iniciarCorrida() {
 
 // ---------- Finalizar corrida e mostrar avaliação ----------
 function finalizarCorrida() {
-  // Mostrar modal com avaliação (reaproveitando modalProcurando área)
   modal.classList.remove('modal-hidden');
   modalEncontrado.classList.add('hidden');
-
   modalProcurando.innerHTML = `
     <h3 class="text-2xl font-bold text-[#38e07b] mb-2">Viagem concluída!</h3>
     <p class="text-[#9eb7a8] mb-3">Obrigado por usar AccessRide.</p>
@@ -572,12 +569,8 @@ setButtonState('preRota');
 window.addEventListener('load', () => setTimeout(() => map.invalidateSize(), 300));
 
 // ---------- Autocomplete de endereços (gratuito via Nominatim) ----------
-
-// Aplica autocomplete a um input específico
 function setupAutocomplete(inputId) {
   const input = document.getElementById(inputId);
-
-  // Cria container de sugestões
   const list = document.createElement('div');
   list.className = 'autocomplete-list';
   list.style.position = 'absolute';
@@ -601,14 +594,12 @@ function setupAutocomplete(inputId) {
       return;
     }
 
-    // debounce 300ms
     timeout = setTimeout(async () => {
       try {
         const res = await fetch(
           `https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&limit=5&q=${encodeURIComponent(query)}`
         );
         const data = await res.json();
-
         list.innerHTML = '';
         if (!data.length) {
           list.style.display = 'none';
@@ -617,19 +608,15 @@ function setupAutocomplete(inputId) {
 
         data.forEach(item => {
           const addr = item.address;
-          
-          // Monta um endereço mais limpo e curto
           const parts = [
-            addr.road || addr.pedestrian || addr.residential || '',      // Rua
-            addr.suburb || addr.neighbourhood || '',                     // Bairro
-            addr.city || addr.town || addr.village || addr.state_district || '',  // Cidade
-            addr.postcode || ''                                          // CEP
-          ].filter(Boolean); // remove vazios
-          
+            addr.road || addr.pedestrian || addr.residential || '',
+            addr.suburb || addr.neighbourhood || '',
+            addr.city || addr.town || addr.village || addr.state_district || '',
+            addr.postcode || ''
+          ].filter(Boolean);
           const shortAddress = parts.join(', ');
-
           const opt = document.createElement('div');
-          opt.textContent = shortAddress || item.display_name; // fallback se algo faltar
+          opt.textContent = shortAddress || item.display_name;
           opt.style.padding = '8px 10px';
           opt.style.cursor = 'pointer';
           opt.style.color = '#f2f2f2';
@@ -648,7 +635,6 @@ function setupAutocomplete(inputId) {
           list.appendChild(opt);
         });
 
-
         list.style.display = 'block';
       } catch (err) {
         console.error('Erro no autocomplete:', err);
@@ -657,7 +643,6 @@ function setupAutocomplete(inputId) {
     }, 300);
   });
 
-  // Esconde sugestões ao clicar fora
   document.addEventListener('click', e => {
     if (!list.contains(e.target) && e.target !== input) {
       list.style.display = 'none';
@@ -665,6 +650,5 @@ function setupAutocomplete(inputId) {
   });
 }
 
-// Ativa o autocomplete nos dois campos
 setupAutocomplete('partida');
 setupAutocomplete('destino');

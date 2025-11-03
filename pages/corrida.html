@@ -60,13 +60,13 @@
               <input id="partida" type="text" class="w-full bg-[#29382f] text-white rounded-lg p-3" placeholder="Digite o endereço">
             </div>
             <div>
-              <label class="block text-white mb-2">Local de chegada</label>
+              <label class="block text-white mb-2">Destino</label>
               <input id="destino" type="text" class="w-full bg-[#29382f] text-white rounded-lg p-3" placeholder="Digite o endereço">
             </div>
           </div>
 
           <div class="mt-6">
-            <label class="block text-white mb-2">Tipo de solicitação</label>
+            <label class="block text-white mb-2">Categorias</label>
             <select id="tipoSolicitacao" class="w-full bg-[#29382f] text-white rounded-lg p-3">
               <option value="">Selecione</option>
               <option value="flexivel">Flexível</option>
@@ -74,9 +74,15 @@
             </select>
           </div>
 
+        <div id="agendamentoContainer" class="mt-6 hidden">
+          <label class="block text-white mb-2">Data e hora da partida</label>
+          <input id="dataHoraAgendada" type="datetime-local"
+                class="w-full bg-[#29382f] text-white rounded-lg p-3">
+        </div>
+
           <div class="mt-6 flex gap-3 items-start">
-            <button id="btnTracar" class="py-2 px-4 bg-[#38e07b] text-[#111714] font-bold rounded-lg hover:bg-green-400">Ver preço</button>
-            <button id="btnConfirm" class="py-2 px-4 bg-[#38e07b] text-[#111714] font-bold rounded-lg hover:bg-green-400 hidden">Confirmar Viagem</button>
+            <button id="btnTracar" class="py-2 px-4 bg-[#38e07b] text-[#111714] font-bold rounded-lg hover:bg-green-400">Consultar preço</button>
+            <button id="btnConfirm" class="py-2 px-4 bg-[#38e07b] text-[#111714] font-bold rounded-lg hover:bg-green-400 hidden">Confirmar carona</button>
             <button id="btnAjuda" class="py-2 px-4 bg-red-500 text-[#111714] font-bold hover:bg-red-400 hidden">Ajuda</button>
           </div>
 

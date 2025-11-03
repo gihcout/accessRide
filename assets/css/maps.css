@@ -104,3 +104,13 @@
     color: #38e07b;
     transform: scale(1.2);
 }
+
+@keyframes piscarLento {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+}
+
+@keyframes piscarRapido {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
