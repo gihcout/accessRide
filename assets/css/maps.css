@@ -66,3 +66,21 @@
     height: 30px;
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
 }
+
+.autocomplete-list div {
+    color: #f2f2f2;               /* texto branco */
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+.autocomplete-list div:hover {
+    background: #38e07b !important;  /* destaca ao passar o mouse */
+    color: #111714 !important;       /* texto escuro sobre verde */
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+/* sombra e leve destaque da caixa */
+.autocomplete-list {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+    border: 1px solid #1f2a23;
+}

@@ -454,3 +454,101 @@ setButtonState('preRota');
 
 // Garante tamanho correto do mapa quando a página termina de carregar
 window.addEventListener('load', () => setTimeout(() => map.invalidateSize(), 300));
+
+// ---------- Autocomplete de endereços (gratuito via Nominatim) ----------
+
+// Aplica autocomplete a um input específico
+function setupAutocomplete(inputId) {
+  const input = document.getElementById(inputId);
+
+  // Cria container de sugestões
+  const list = document.createElement('div');
+  list.className = 'autocomplete-list';
+  list.style.position = 'absolute';
+  list.style.background = '#29382f';
+  list.style.borderRadius = '8px';
+  list.style.marginTop = '2px';
+  list.style.zIndex = '9999';
+  list.style.width = '100%';
+  list.style.maxHeight = '180px';
+  list.style.overflowY = 'auto';
+  list.style.display = 'none';
+  input.parentNode.appendChild(list);
+
+  let timeout = null;
+
+  input.addEventListener('input', () => {
+    clearTimeout(timeout);
+    const query = input.value.trim();
+    if (query.length < 3) {
+      list.style.display = 'none';
+      return;
+    }
+
+    // debounce 300ms
+    timeout = setTimeout(async () => {
+      try {
+        const res = await fetch(
+          `https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&limit=5&q=${encodeURIComponent(query)}`
+        );
+        const data = await res.json();
+
+        list.innerHTML = '';
+        if (!data.length) {
+          list.style.display = 'none';
+          return;
+        }
+
+        data.forEach(item => {
+          const addr = item.address;
+          
+          // Monta um endereço mais limpo e curto
+          const parts = [
+            addr.road || addr.pedestrian || addr.residential || '',      // Rua
+            addr.suburb || addr.neighbourhood || '',                     // Bairro
+            addr.city || addr.town || addr.village || addr.state_district || '',  // Cidade
+            addr.postcode || ''                                          // CEP
+          ].filter(Boolean); // remove vazios
+          
+          const shortAddress = parts.join(', ');
+
+          const opt = document.createElement('div');
+          opt.textContent = shortAddress || item.display_name; // fallback se algo faltar
+          opt.style.padding = '8px 10px';
+          opt.style.cursor = 'pointer';
+          opt.style.color = '#f2f2f2';
+          opt.addEventListener('mouseenter', () => {
+            opt.style.background = '#38e07b';
+            opt.style.color = '#111714';
+          });
+          opt.addEventListener('mouseleave', () => {
+            opt.style.background = '#29382f';
+            opt.style.color = '#f2f2f2';
+          });
+          opt.addEventListener('click', () => {
+            input.value = shortAddress || item.display_name;
+            list.style.display = 'none';
+          });
+          list.appendChild(opt);
+        });
+
+
+        list.style.display = 'block';
+      } catch (err) {
+        console.error('Erro no autocomplete:', err);
+        list.style.display = 'none';
+      }
+    }, 300);
+  });
+
+  // Esconde sugestões ao clicar fora
+  document.addEventListener('click', e => {
+    if (!list.contains(e.target) && e.target !== input) {
+      list.style.display = 'none';
+    }
+  });
+}
+
+// Ativa o autocomplete nos dois campos
+setupAutocomplete('partida');
+setupAutocomplete('destino');
