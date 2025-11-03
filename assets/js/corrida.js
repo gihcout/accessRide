@@ -17,6 +17,8 @@ let partidaCoords = null,
     animationElapsed = 0,        // tempo acumulado da animação (para progressos)
     routeTraveled = null,        // parte da rota já percorrida
     routeRemaining = null;       // parte da rota restante
+    corridaCancelada = false;   // indica se o usuário cancelou a corrida
+
 
 // Ícone do carro (usando emoji para consistência com seu projeto)
 const carIcon = L.divIcon({
@@ -41,6 +43,20 @@ const modal = el('modal'),
 
 // botão cancelar está dentro do modalEncontrado — buscar seguro
 const cancelModalBtn = el('cancelModal');
+
+// Função global de alerta estilizado
+function showAlert(message) {
+  const modal = document.getElementById('alertModal');
+  const msg = document.getElementById('alertMessage');
+  const ok = document.getElementById('alertOk');
+  
+  msg.textContent = message;
+  modal.classList.remove('hidden');
+  
+  ok.onclick = () => {
+    modal.classList.add('hidden');
+  };
+}
 
 // ---------- Funções auxiliares ----------
 
@@ -103,8 +119,18 @@ function formatMinuteSecond(sec) {
 
 // ---------- Evento: Traçar rota (Ver preço) ----------
 btnTracar.addEventListener('click', async () => {
-  const partidaTxt = el('partida').value.trim(), destinoTxt = el('destino').value.trim();
-  if (!partidaTxt || !destinoTxt) return alert("Preencha partida e destino");
+  const need = el('need').value;
+  const equip = el('equip').value;
+  const partidaTxt = el('partida').value.trim();
+  const destinoTxt = el('destino').value.trim();
+
+  if (need === "Selecione sua condição")
+    return showAlert("Por favor, selecione suas necessidades especiais antes de continuar.");
+  if (equip === "Selecione seus equipamentos")
+    return showAlert("Por favor, selecione seus equipamentos antes de continuar.");
+  if (!partidaTxt || !destinoTxt)
+    return showAlert("Preencha partida e destino para continuar.");
+
 
   // Limpar rotas anteriores
   removerControle(control);
@@ -114,7 +140,7 @@ btnTracar.addEventListener('click', async () => {
     [partidaCoords, destinoCoords] = await Promise.all([geocode(partidaTxt), geocode(destinoTxt)]);
   } catch (err) {
     console.error(err);
-    return alert("Não foi possível localizar os endereços");
+    return showAlert("Não foi possível localizar os endereços");
   }
 
   // Criar novo controle de rota (principal)
@@ -141,10 +167,29 @@ btnTracar.addEventListener('click', async () => {
   .addTo(map);
 });
 
+// ---------- Bloquear / desbloquear campos ----------
+function toggleCamposViagem(bloquear) {
+  const campos = ['need', 'equip', 'partida', 'destino', 'tipoSolicitacao'];
+  campos.forEach(id => {
+    const campo = el(id);
+    if (campo) campo.disabled = bloquear; // true = bloqueia; false = libera
+  });
+}
+
 // ---------- Evento: Confirmar viagem ----------
 btnConfirm.addEventListener('click', () => {
+  corridaCancelada = false; // reset no início de uma nova corrida
+
+  const need = el('need').value;
+  const equip = el('equip').value;
   const tipo = el('tipoSolicitacao').value;
-  if (!tipo) return alert("Escolha tipo de solicitação");
+
+  if (need === "Selecione sua condição")
+    return showAlert("Por favor, selecione suas necessidades especiais antes de confirmar.");
+  if (equip === "Selecione seus equipamentos")
+    return showAlert("Por favor, selecione seus equipamentos antes de confirmar.");
+  if (!tipo)
+    return showAlert("Escolha o tipo de solicitação antes de confirmar.");
 
   const modelo = escolherModelo();
   const motorista = escolherMotorista();
@@ -159,6 +204,7 @@ btnConfirm.addEventListener('click', () => {
   modalTextoBusca.textContent = `Procurando motorista com veículo: ${modelo}...`;
 
   setButtonState('viagemConfirmada');
+  toggleCamposViagem(true);
 
   // Se o usuário clicar em cancelar, lidar
   setupCancelHandler();
@@ -186,24 +232,48 @@ btnConfirm.addEventListener('click', () => {
 // ---------- Cancelar ----------
 function setupCancelHandler() {
   if (!cancelModalBtn) return;
-  // remove listeners anteriores para evitar duplicação
+  
+  // remove listeners antigos para evitar duplicações
   cancelModalBtn.replaceWith(cancelModalBtn.cloneNode(true));
   const newCancel = el('cancelModal');
+
   newCancel.addEventListener('click', () => {
+    corridaCancelada = true; // 🔹 marca cancelamento global
+
     modal.classList.add('modal-hidden');
-    if (animationInterval) clearInterval(animationInterval);
-    if (motoristaMarker) { try { map.removeLayer(motoristaMarker); } catch(e){} motoristaMarker = null; }
-    if (routePolyline) { try { map.removeLayer(routePolyline); } catch(e){} routePolyline = null; }
+
+    // Para qualquer animação em andamento
+    if (animationInterval) {
+      clearInterval(animationInterval);
+      animationInterval = null;
+    }
+
+    // Remove marcador e polylines do mapa
+    if (motoristaMarker) {
+      try { map.removeLayer(motoristaMarker); } catch(e){}
+      motoristaMarker = null;
+    }
+    if (routePolyline) {
+      try { map.removeLayer(routePolyline); } catch(e){}
+      routePolyline = null;
+    }
+
+    // Remove rotas
     removerControle(driverRouter);
     driverRouter = null;
+    toggleCamposViagem(false);
+
     setButtonState('preRota');
-    alert('🚫 Corrida cancelada.');
+    showAlert('🚫 Corrida cancelada.');
   });
 }
+
 
 // ---------- Inicia deslocamento do motorista até o passageiro ----------
 function iniciarDeslocamentoMotorista() {
   // segurança: precisa ter partidaCoords
+  if (corridaCancelada) return console.log("❌ Corrida cancelada antes do deslocamento.");
+
   console.log("→ iniciarDeslocamentoMotorista chamado");
   if (!partidaCoords) return console.warn('Sem coordenadas de partida.');
 
@@ -279,6 +349,12 @@ function animarMotorista(coords, fase) {
 
   let steps = 0;
   animationInterval = setInterval(() => {
+    if (corridaCancelada) {
+      clearInterval(animationInterval);
+      animationInterval = null;
+      return console.log("⛔ Animação interrompida — corrida cancelada.");
+    }
+
     if (idx >= coords.length - 1) {
       clearInterval(animationInterval);
 
@@ -354,6 +430,8 @@ function animarMotorista(coords, fase) {
 
 // ---------- Iniciar corrida (motorista agora leva passageiro ao destino) ----------
 function iniciarCorrida() {
+  if (corridaCancelada) return console.log("❌ Corrida cancelada antes de iniciar viagem.");
+
   // remove rotas antigas para desenhar nova rota
   removerControle(driverRouter);
   driverRouter = null;
@@ -422,6 +500,7 @@ function finalizarCorrida() {
   modalProcurando.classList.remove('hidden');
 
   setButtonState('pósViagem');
+  toggleCamposViagem(false);
   configurarAvaliacao();
 }
 
@@ -439,7 +518,7 @@ function configurarAvaliacao() {
   });
 
   btnEnviar.addEventListener('click', () => {
-    if (avaliacao === 0) return alert("Por favor, selecione uma nota antes de enviar.");
+    if (avaliacao === 0) return showAlert("Por favor, selecione uma nota antes de enviar.");
     modalProcurando.innerHTML = `
       <h3 class="text-2xl font-bold text-[#38e07b] mb-2">Obrigado pela avaliação!</h3>
       <p class="text-[#9eb7a8] mb-3">Você deu ${avaliacao} ${avaliacao === 1 ? 'estrela' : 'estrelas'}.</p>
