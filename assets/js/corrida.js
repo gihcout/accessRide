@@ -553,12 +553,37 @@ function configurarAvaliacao() {
 
   btnEnviar.addEventListener('click', () => {
     if (avaliacao === 0) return showAlert("Por favor, selecione uma nota antes de enviar.");
-    modalProcurando.innerHTML = `
-      <h3 class="text-2xl font-bold text-[#38e07b] mb-2">Obrigado pela avaliação!</h3>
-      <p class="text-[#9eb7a8] mb-3">Você deu ${avaliacao} ${avaliacao === 1 ? 'estrela' : 'estrelas'}.</p>
-      <p class="text-[#9eb7a8]">A AccessRide agradece seu feedback 💚</p>
-    `;
-    setTimeout(() => modal.classList.add('modal-hidden'), 2000);
+
+    // 🟢 Avaliação positiva (3 a 5 estrelas)
+    if (avaliacao > 2) {
+      modalProcurando.innerHTML = `
+        <h3 class="text-2xl font-bold text-[#38e07b] mb-2">Obrigado pela avaliação!</h3>
+        <p class="text-[#9eb7a8] mb-3">Você deu ${avaliacao} ${avaliacao === 1 ? 'estrela' : 'estrelas'}.</p>
+        <p class="text-[#9eb7a8]">A AccessRide agradece seu feedback 💚</p>
+      `;
+    } 
+    // 🔴 Avaliação negativa (1 ou 2 estrelas)
+    else {
+      modalProcurando.innerHTML = `
+        <h3 class="text-2xl font-bold text-[#ff4d4d] mb-2">Sentimos muito pela sua experiência 😔</h3>
+        <p class="text-[#ff9999] mb-3">Você deu ${avaliacao} ${avaliacao === 1 ? 'estrela' : 'estrelas'}.</p>
+        <p class="text-[#ff9999]">Entre em contato com nosso suporte para que possamos melhorar:<br>
+        <a href="mailto:suporte@accessride.com.br" class="underline text-[#ff4d4d]">suporte@accessride.com.br</a></p>
+      `;
+    }
+
+    // Mostra botão para fechar e só recarrega quando fechar
+    ensureCloseButton();
+
+    // 🔹 Adiciona um listener temporário para recarregar ao fechar
+    const btnFechar = document.getElementById('closeModal');
+    if (btnFechar) {
+      const recarregarAoFechar = () => {
+        location.reload();
+        btnFechar.removeEventListener('click', recarregarAoFechar);
+      };
+      btnFechar.addEventListener('click', recarregarAoFechar);
+    }
   });
 }
 
