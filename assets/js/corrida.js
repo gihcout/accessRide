@@ -222,32 +222,32 @@ btnConfirm.addEventListener('click', () => {
       el('tipoSolicitacao').parentNode.insertAdjacentElement('afterend', agendamentoDiv);
     }
 
-    if (agendamentoDiv.classList.contains('hidden') || !el('dataHoraAgendada')) {
-      agendamentoDiv.classList.remove('hidden');
-      return showAlert("Escolha a data e hora desejadas e clique em Confirmar novamente.");
-    }
-    const dataInput = el('dataHoraAgendada');
-    if (!dataInput.value)
-      return showAlert("Informe uma data e hora válidas para agendar sua carona.");
-    agendamentoDiv.classList.add('hidden');
+    // if (agendamentoDiv.classList.contains('hidden') || !el('dataHoraAgendada')) {
+    //   agendamentoDiv.classList.remove('hidden');
+    //   return showAlert("Escolha a data e hora desejadas e clique em Confirmar novamente.");
+    // }
     // const dataInput = el('dataHoraAgendada');
-    // agendamentoDiv.classList.remove('hidden');
-
-    // // Define o mínimo possível = agora + 3h
-    // const agora = new Date();
-    // const min = new Date(agora.getTime() + 3 * 60 * 60 * 1000);
-    // dataInput.min = min.toISOString().slice(0,16);
-    // if (!dataInput.value) {
-    //   return showAlert(`Escolha uma data e hora (mínimo: ${min.toLocaleString()}) e confirme novamente.`);
-    // }
-
-    // const agendado = new Date(dataInput.value);
-    // const diffHoras = (agendado - agora) / (1000 * 60 * 60);
-
-    // if (diffHoras < 3) {
-    //   return showAlert("⚠️ O horário agendado deve ser pelo menos 3 horas após o horário atual.");
-    // }
+    // if (!dataInput.value)
+    //   return showAlert("Informe uma data e hora válidas para agendar sua carona.");
     // agendamentoDiv.classList.add('hidden');
+    const dataInput = el('dataHoraAgendada');
+    agendamentoDiv.classList.remove('hidden');
+
+    // Define o mínimo possível = agora + 3h
+    const agora = new Date();
+    const min = new Date(agora.getTime() + 3 * 60 * 60 * 1000);
+    dataInput.min = min.toISOString().slice(0,16);
+    if (!dataInput.value) {
+      return showAlert(`Escolha uma data e hora (mínimo: ${min.toLocaleString()}) e confirme novamente.`);
+    }
+
+    const agendado = new Date(dataInput.value);
+    const diffHoras = (agendado - agora) / (1000 * 60 * 60);
+
+    if (diffHoras < 3) {
+      return showAlert("⚠️ O horário agendado deve ser pelo menos 3 horas após o horário atual.");
+    }
+    agendamentoDiv.classList.add('hidden');
   }
 
   // ====== [2] Dados comuns ======
@@ -416,26 +416,26 @@ function animarMotorista(coords, fase) {
 
   routeRemaining = L.polyline([coords[0]], { color: '#000301ff', weight: 5 }).addTo(map);
 
-  let idx = 0, t = 0;
-  const totalDurationSec = (fase === 'toPassenger')
-    ? Math.max(10, Math.floor(coords.length / 3))
-    : Math.max(12, Math.floor(coords.length / 2));
-  const intervalMs = 40;
-  const stepsTotal = Math.ceil((totalDurationSec * 1000) / intervalMs);
-
-  progressFill.style.width = '0%';
-  setButtonState(fase === 'toPassenger' ? 'motoristaACaminho' : 'emViagem');
   // let idx = 0, t = 0;
+  // const totalDurationSec = (fase === 'toPassenger')
+  //   ? Math.max(10, Math.floor(coords.length / 3))
+  //   : Math.max(12, Math.floor(coords.length / 2));
   // const intervalMs = 40;
-  // let totalDist = 0;
-  // for (let i = 0; i < coords.length - 1; i++) {
-  //   totalDist += map.distance(coords[i], coords[i + 1]);
-  // }
-  // const velocidade = (fase === 'toPassenger') ? 6.9 : 11.1;
-  // const totalDurationSec = Math.max(10, totalDist / velocidade);
   // const stepsTotal = Math.ceil((totalDurationSec * 1000) / intervalMs);
+
   // progressFill.style.width = '0%';
   // setButtonState(fase === 'toPassenger' ? 'motoristaACaminho' : 'emViagem');
+  let idx = 0, t = 0;
+  const intervalMs = 40;
+  let totalDist = 0;
+  for (let i = 0; i < coords.length - 1; i++) {
+    totalDist += map.distance(coords[i], coords[i + 1]);
+  }
+  const velocidade = (fase === 'toPassenger') ? 6.9 : 11.1;
+  const totalDurationSec = Math.max(10, totalDist / velocidade);
+  const stepsTotal = Math.ceil((totalDurationSec * 1000) / intervalMs);
+  progressFill.style.width = '0%';
+  setButtonState(fase === 'toPassenger' ? 'motoristaACaminho' : 'emViagem');
 
   function lerp(a, b, t) { return a + (b - a) * t; }
 
