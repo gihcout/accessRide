@@ -222,14 +222,6 @@ btnConfirm.addEventListener('click', () => {
       el('tipoSolicitacao').parentNode.insertAdjacentElement('afterend', agendamentoDiv);
     }
 
-    // if (agendamentoDiv.classList.contains('hidden') || !el('dataHoraAgendada')) {
-    //   agendamentoDiv.classList.remove('hidden');
-    //   return showAlert("Escolha a data e hora desejadas e clique em Confirmar novamente.");
-    // }
-    // const dataInput = el('dataHoraAgendada');
-    // if (!dataInput.value)
-    //   return showAlert("Informe uma data e hora válidas para agendar sua carona.");
-    // agendamentoDiv.classList.add('hidden');
     const dataInput = el('dataHoraAgendada');
     agendamentoDiv.classList.remove('hidden');
 
@@ -416,15 +408,6 @@ function animarMotorista(coords, fase) {
 
   routeRemaining = L.polyline([coords[0]], { color: '#000301ff', weight: 5 }).addTo(map);
 
-  // let idx = 0, t = 0;
-  // const totalDurationSec = (fase === 'toPassenger')
-  //   ? Math.max(10, Math.floor(coords.length / 3))
-  //   : Math.max(12, Math.floor(coords.length / 2));
-  // const intervalMs = 40;
-  // const stepsTotal = Math.ceil((totalDurationSec * 1000) / intervalMs);
-
-  // progressFill.style.width = '0%';
-  // setButtonState(fase === 'toPassenger' ? 'motoristaACaminho' : 'emViagem');
   let idx = 0, t = 0;
   const intervalMs = 40;
   let totalDist = 0;
