@@ -1,4 +1,3 @@
-// ---------- Elementos ----------
 const el = id => document.getElementById(id);
 
 // Mapa
@@ -19,7 +18,7 @@ let partidaCoords = null,
     routeRemaining = null,       // parte da rota restante
     corridaCancelada = false;    // indica se o usuário cancelou a corrida
 
-// Ícone do carro (usando emoji para consistência com seu projeto)
+// Ícone do carro
 const carIcon = L.divIcon({
   html: '<img src="../assets/img/cadeira.png" class="car-icon" />',
   className: '',
@@ -89,13 +88,6 @@ function ensureCloseButton() {
   };
 }
 
-// ---------- Funções auxiliares ----------
-function tocarNotificacao() {
-  const audio = new Audio('https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg'); 
-  audio.volume = 0.3; // volume baixo
-  audio.play();
-}
-
 function setButtonState(state) {
   // estados: 'preRota', 'rotaTraçada', 'viagemConfirmada', 'motoristaACaminho', 'motoristaChegou', 'emViagem', 'pósViagem'
   btnTracar.classList.toggle('hidden', !(state === 'preRota' && state !== 'rotaTraçada'));
@@ -146,7 +138,7 @@ function formatMinuteSecond(sec) {
   return `${m}:${s.toString().padStart(2, '0')}`;
 }
 
-// ---------- Evento: Traçar rota (Ver preço) ----------
+// ---------- Evento: Ver preço ----------
 btnTracar.addEventListener('click', async () => {
   const need = el('need').value;
   const equip = el('equip').value;
@@ -230,7 +222,6 @@ btnConfirm.addEventListener('click', () => {
       el('tipoSolicitacao').parentNode.insertAdjacentElement('afterend', agendamentoDiv);
     }
 
-    // Se o campo ainda não estiver preenchido
     if (agendamentoDiv.classList.contains('hidden') || !el('dataHoraAgendada')) {
       agendamentoDiv.classList.remove('hidden');
       return showAlert("Escolha a data e hora desejadas e clique em Confirmar novamente.");
@@ -238,9 +229,25 @@ btnConfirm.addEventListener('click', () => {
     const dataInput = el('dataHoraAgendada');
     if (!dataInput.value)
       return showAlert("Informe uma data e hora válidas para agendar sua carona.");
-
-    // Esconde o bloco após o preenchimento
     agendamentoDiv.classList.add('hidden');
+    // const dataInput = el('dataHoraAgendada');
+    // agendamentoDiv.classList.remove('hidden');
+
+    // // Define o mínimo possível = agora + 3h
+    // const agora = new Date();
+    // const min = new Date(agora.getTime() + 3 * 60 * 60 * 1000);
+    // dataInput.min = min.toISOString().slice(0,16);
+    // if (!dataInput.value) {
+    //   return showAlert(`Escolha uma data e hora (mínimo: ${min.toLocaleString()}) e confirme novamente.`);
+    // }
+
+    // const agendado = new Date(dataInput.value);
+    // const diffHoras = (agendado - agora) / (1000 * 60 * 60);
+
+    // if (diffHoras < 3) {
+    //   return showAlert("⚠️ O horário agendado deve ser pelo menos 3 horas após o horário atual.");
+    // }
+    // agendamentoDiv.classList.add('hidden');
   }
 
   // ====== [2] Dados comuns ======
@@ -274,8 +281,6 @@ btnConfirm.addEventListener('click', () => {
       msgConfirm.className = 'mt-2 text-[#9eb7a8] text-sm';
       msgConfirm.textContent = 'Carona confirmada para o horário agendado ✅';
       modalEncontrado.appendChild(msgConfirm);
-
-      // --- Contador regressivo até o início ---
       const contador = document.createElement('p');
       contador.className = 'mt-2 text-[#38e07b] text-lg font-bold transition-all duration-500';
       modalEncontrado.appendChild(contador);
@@ -291,8 +296,6 @@ btnConfirm.addEventListener('click', () => {
           contador.style.color = '#38e07b';
           contador.style.animation = 'none';
           clearInterval(intervaloContador);
-
-          // Fecha modal e inicia deslocamento
           setTimeout(() => {
             modal.classList.add('modal-hidden');
             iniciarDeslocamentoMotorista();
@@ -305,16 +308,14 @@ btnConfirm.addEventListener('click', () => {
         contador.textContent = `⏳ Corrida inicia em ${min}m ${seg < 10 ? '0' + seg : seg}s...`;
 
         // === Efeitos visuais ===
-        contador.style.color = '#38e07b'; // padrão (verde)
+        contador.style.color = '#38e07b';
         contador.style.animation = 'none';
 
         if (diff <= 60000) {
-          // Último minuto → amarelo e piscando lento
           contador.style.color = '#f7e45c';
           contador.style.animation = 'piscarLento 1s infinite';
         }
         if (diff <= 10000) {
-          // Últimos 10 segundos → vermelho e piscando rápido
           contador.style.color = '#ff4d4d';
           contador.style.animation = 'piscarRapido 0.5s infinite';
         }
@@ -322,9 +323,6 @@ btnConfirm.addEventListener('click', () => {
 
       atualizarContador();
       const intervaloContador = setInterval(atualizarContador, 1000);
-
-      // Mostra alerta sem fechar modal
-      showAlert("✅ Corrida agendada! Você será notificado quando estiver próximo do horário.");
       return; 
     }
 
@@ -367,14 +365,14 @@ function setupCancelHandler() {
     toggleCamposViagem(false);
     setButtonState('preRota');
     showAlert('🚫 Corrida cancelada.');
+    setTimeout(() => {
+      location.reload();
+    }, 1500);
   });
 }
 
 // ---------- Inicia deslocamento do motorista até o passageiro ----------
 function iniciarDeslocamentoMotorista() {
-  if (corridaCancelada) return console.log("❌ Corrida cancelada antes do deslocamento.");
-  if (!partidaCoords) return console.warn('Sem coordenadas de partida.');
-
   removerControle(driverRouter);
   driverRouter = null;
 
@@ -427,6 +425,17 @@ function animarMotorista(coords, fase) {
 
   progressFill.style.width = '0%';
   setButtonState(fase === 'toPassenger' ? 'motoristaACaminho' : 'emViagem');
+  // let idx = 0, t = 0;
+  // const intervalMs = 40;
+  // let totalDist = 0;
+  // for (let i = 0; i < coords.length - 1; i++) {
+  //   totalDist += map.distance(coords[i], coords[i + 1]);
+  // }
+  // const velocidade = (fase === 'toPassenger') ? 6.9 : 11.1;
+  // const totalDurationSec = Math.max(10, totalDist / velocidade);
+  // const stepsTotal = Math.ceil((totalDurationSec * 1000) / intervalMs);
+  // progressFill.style.width = '0%';
+  // setButtonState(fase === 'toPassenger' ? 'motoristaACaminho' : 'emViagem');
 
   function lerp(a, b, t) { return a + (b - a) * t; }
 
@@ -435,7 +444,7 @@ function animarMotorista(coords, fase) {
     if (corridaCancelada) {
       clearInterval(animationInterval);
       animationInterval = null;
-      return console.log("⛔ Animação interrompida — corrida cancelada.");
+      location.reload();
     }
 
     if (idx >= coords.length - 1) {
@@ -487,10 +496,8 @@ function animarMotorista(coords, fase) {
   }, intervalMs);
 }
 
-// ---------- Iniciar corrida (motorista agora leva passageiro ao destino) ----------
+// ---------- Iniciar corrida ----------
 function iniciarCorrida() {
-  if (corridaCancelada) return console.log("❌ Corrida cancelada antes de iniciar viagem.");
-
   removerControle(driverRouter);
   driverRouter = null;
   if (routePolyline) { map.removeLayer(routePolyline); routePolyline = null; }
@@ -538,7 +545,7 @@ function finalizarCorrida() {
   configurarAvaliacao();
 }
 
-// ---------- Configurar avaliação (event listeners) ----------
+// ---------- Configurar avaliação ----------
 function configurarAvaliacao() {
   const estrelas = document.querySelectorAll('.estrela');
   const btnEnviar = document.getElementById('btnEnviarAvaliacao');
@@ -554,7 +561,6 @@ function configurarAvaliacao() {
   btnEnviar.addEventListener('click', () => {
     if (avaliacao === 0) return showAlert("Por favor, selecione uma nota antes de enviar.");
 
-    // 🟢 Avaliação positiva (3 a 5 estrelas)
     if (avaliacao > 2) {
       modalProcurando.innerHTML = `
         <h3 class="text-2xl font-bold text-[#38e07b] mb-2">Obrigado pela avaliação!</h3>
@@ -562,7 +568,6 @@ function configurarAvaliacao() {
         <p class="text-[#9eb7a8]">A AccessRide agradece seu feedback 💚</p>
       `;
     } 
-    // 🔴 Avaliação negativa (1 ou 2 estrelas)
     else {
       modalProcurando.innerHTML = `
         <h3 class="text-2xl font-bold text-[#ff4d4d] mb-2">Sentimos muito pela sua experiência 😔</h3>
@@ -571,11 +576,7 @@ function configurarAvaliacao() {
         <a href="mailto:suporte@accessride.com.br" class="underline text-[#ff4d4d]">suporte@accessride.com.br</a></p>
       `;
     }
-
-    // Mostra botão para fechar e só recarrega quando fechar
     ensureCloseButton();
-
-    // 🔹 Adiciona um listener temporário para recarregar ao fechar
     const btnFechar = document.getElementById('closeModal');
     if (btnFechar) {
       const recarregarAoFechar = () => {
@@ -586,14 +587,10 @@ function configurarAvaliacao() {
     }
   });
 }
-
-// Inicializa estado de botões ao carregar script
 setButtonState('preRota');
-
-// Garante tamanho correto do mapa quando a página termina de carregar
 window.addEventListener('load', () => setTimeout(() => map.invalidateSize(), 300));
 
-// ---------- Autocomplete de endereços (gratuito via Nominatim) ----------
+// ---------- Autocomplete de endereços ----------
 function setupAutocomplete(inputId) {
   const input = document.getElementById(inputId);
   const list = document.createElement('div');

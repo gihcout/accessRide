@@ -1,5 +1,3 @@
-/* styles.css */
-
 #map {
     height: 60vh;
     min-height: 360px;
@@ -68,18 +66,17 @@
 }
 
 .autocomplete-list div {
-    color: #f2f2f2;               /* texto branco */
+    color: #f2f2f2; 
     font-size: 0.95rem;
     line-height: 1.4;
 }
 
 .autocomplete-list div:hover {
-    background: #38e07b !important;  /* destaca ao passar o mouse */
-    color: #111714 !important;       /* texto escuro sobre verde */
+    background: #38e07b !important; 
+    color: #111714 !important;
     transition: background 0.15s ease, color 0.15s ease;
 }
 
-/* sombra e leve destaque da caixa */
 .autocomplete-list {
     box-shadow: 0 4px 8px rgba(0,0,0,0.4);
     border: 1px solid #1f2a23;
@@ -113,4 +110,12 @@
 @keyframes piscarRapido {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.3; }
+}
+
+#loadingOverlay {
+    transition: opacity 0.5s ease;
+}
+#loadingOverlay.hidden {
+    opacity: 0;
+    pointer-events: none;
 }
