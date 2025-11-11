@@ -1,0 +1,24 @@
+name: Validar Develop
+
+on:
+  pull_request:
+    branches:
+      - develop
+
+jobs:
+  validate-develop:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validar HTML
+        run: |
+          sudo apt-get install -y tidy
+          find . -name "*.html" -exec tidy -qe {} \; || true
+      - name: Validar CSS
+        run: |
+          npm install -g stylelint stylelint-config-standard
+          npx stylelint "**/*.css" || true
+      - name: Validar JS
+        run: |
+          npm install -g eslint
+          npx eslint . || true

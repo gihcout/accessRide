@@ -1,0 +1,28 @@
+name: Criar PR automática da Develop para Main
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  create-release-pr:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Criar PR de release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          EXISTING_PR=$(gh pr list --head develop --base main --json number --jq '.[0].number' || true)
+          if [ -z "$EXISTING_PR" ]; then
+            gh pr create \
+              --base main \
+              --head develop \
+              --title "Release automática" \
+              --body "PR gerada automaticamente após atualizações na develop."
+          else
+            echo "PR de release já existente (#$EXISTING_PR)"
+          fi

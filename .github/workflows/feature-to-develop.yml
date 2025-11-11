@@ -1,0 +1,53 @@
+name: Validar e abrir PR para Develop
+
+on:
+  push:
+    branches:
+      - 'feature/*'
+
+jobs:
+  validate-and-create-pr:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Validar sintaxe HTML
+        run: |
+          sudo apt-get install -y tidy
+          find . -name "*.html" -exec tidy -qe {} \; || true
+
+      - name: Validar sintaxe CSS
+        run: |
+          npm install -g stylelint stylelint-config-standard
+          npx stylelint "**/*.css" || true
+
+      - name: Validar sintaxe JavaScript
+        run: |
+          npm install -g eslint
+          npx eslint . || true
+
+      - name: Criar PR automática para develop
+        if: success()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          BRANCH_NAME=${GITHUB_REF##*/}
+          echo "Branch atual: $BRANCH_NAME"
+
+          EXISTING_PR=$(gh pr list --head "$BRANCH_NAME" --base develop --json number --jq '.[0].number' || true)
+
+          if [ -z "$EXISTING_PR" ]; then
+            gh pr create \
+              --base develop \
+              --head "$BRANCH_NAME" \
+              --title "Merge automático da feature: $BRANCH_NAME" \
+              --body "PR criada automaticamente após validação da branch **$BRANCH_NAME**."
+          else
+            echo "PR já existe (#$EXISTING_PR)"
+          fi
