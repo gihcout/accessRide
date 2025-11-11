@@ -35,7 +35,7 @@ jobs:
       - name: Criar PR automática para develop
         if: success()
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_PAT }}
         run: |
           BRANCH_NAME=${GITHUB_REF##*/}
           echo "Branch atual: $BRANCH_NAME"
