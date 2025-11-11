@@ -36,6 +36,7 @@ jobs:
         if: success()
         env:
           GH_TOKEN: ${{ secrets.GH_PAT }}
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
         run: |
           BRANCH_NAME=${GITHUB_REF##*/}
           echo "Branch atual: $BRANCH_NAME"
