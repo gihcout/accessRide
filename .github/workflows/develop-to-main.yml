@@ -11,7 +11,13 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
+
     steps:
+      - name: Checkout completo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - name: Criar PR de release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
