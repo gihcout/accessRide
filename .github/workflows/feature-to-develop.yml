@@ -1,4 +1,4 @@
-name: Validar e abrir PR para Develop
+name: Validar Feature
 
 on:
   push:
@@ -6,58 +6,19 @@ on:
       - 'feature/*'
 
 jobs:
-  validate-and-create-pr:
+  validate-feature:
     runs-on: ubuntu-latest
-
-    permissions:
-      contents: write
-      pull-requests: write
-
     steps:
-      - name: Checkout do código
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Validar sintaxe HTML
-        run: |
-          sudo apt-get install -y tidy
-          find . -name "*.html" -exec tidy -qe {} \; || true
+      - name: Validar HTML
+        run: sudo apt-get install -y tidy && find . -name "*.html" -exec tidy -qe {} \; || true
 
-      - name: Validar sintaxe CSS
-        run: |
-          npm install -g stylelint stylelint-config-standard
-          npx stylelint "**/*.css" || true
+      - name: Validar CSS
+        run: npm install -g stylelint stylelint-config-standard && npx stylelint "**/*.css" || true
 
-      - name: Validar sintaxe JavaScript
-        run: |
-          npm install -g eslint
-          npx eslint . || true
+      - name: Validar JS
+        run: npm install -g eslint && npx eslint . || true
 
-      - name: Criar Pull Request automática para develop
-        if: success()
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const branchName = process.env.GITHUB_REF.replace('refs/heads/', '');
-            const { owner, repo } = context.repo;
-
-            const prs = await github.rest.pulls.list({
-              owner,
-              repo,
-              head: `${owner}:${branchName}`,
-              base: "develop",
-              state: "open",
-            });
-
-            if (prs.data.length === 0) {
-              await github.rest.pulls.create({
-                owner,
-                repo,
-                head: branchName,
-                base: "develop",
-                title: `Merge automático da feature: ${branchName}`,
-                body: `PR criada automaticamente após validação da branch **${branchName}**.`,
-              });
-              core.info(`✅ PR criada automaticamente: feature/${branchName} → develop`);
-            } else {
-              core.info(`ℹ️ PR já existe (#${prs.data[0].number})`);
-            }
+      - name: Aviso final
+        run: echo "✅ Validação concluída! Crie uma Pull Request para 'develop'."
