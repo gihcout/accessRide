@@ -32,27 +32,32 @@ jobs:
           npm install -g eslint
           npx eslint . || true
 
-            - name: Criar PR automática para develop
+      - name: Criar Pull Request automática para develop
         if: success()
-        env:
-          GH_TOKEN: ${{ secrets.GH_PAT }}
-        run: |
-          BRANCH_NAME=${GITHUB_REF##*/}
-          echo "Branch atual: $BRANCH_NAME"
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const branchName = process.env.GITHUB_REF.replace('refs/heads/', '');
+            const { owner, repo } = context.repo;
 
-          echo "🔑 Autenticando o GitHub CLI..."
-          echo "${GH_TOKEN}" | gh auth login --with-token
+            const prs = await github.rest.pulls.list({
+              owner,
+              repo,
+              head: `${owner}:${branchName}`,
+              base: "develop",
+              state: "open",
+            });
 
-          echo "🔍 Verificando PR existente..."
-          EXISTING_PR=$(gh pr list --head "$BRANCH_NAME" --base develop --json number --jq '.[0].number' || true)
-
-          if [ -z "$EXISTING_PR" ]; then
-            echo "🆕 Criando nova PR para develop..."
-            gh pr create \
-              --base develop \
-              --head "$BRANCH_NAME" \
-              --title "Merge automático da feature: $BRANCH_NAME" \
-              --body "PR criada automaticamente após validação da branch **$BRANCH_NAME**."
-          else
-            echo "⚙️ PR já existe (#$EXISTING_PR)"
-          fi
+            if (prs.data.length === 0) {
+              await github.rest.pulls.create({
+                owner,
+                repo,
+                head: branchName,
+                base: "develop",
+                title: `Merge automático da feature: ${branchName}`,
+                body: `PR criada automaticamente após validação da branch **${branchName}**.`,
+              });
+              core.info(`✅ PR criada automaticamente: feature/${branchName} → develop`);
+            } else {
+              core.info(`ℹ️ PR já existe (#${prs.data[0].number})`);
+            }
