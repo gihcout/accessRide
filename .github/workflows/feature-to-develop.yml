@@ -32,23 +32,27 @@ jobs:
           npm install -g eslint
           npx eslint . || true
 
-      - name: Criar PR automática para develop
+            - name: Criar PR automática para develop
         if: success()
         env:
           GH_TOKEN: ${{ secrets.GH_PAT }}
-          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
         run: |
           BRANCH_NAME=${GITHUB_REF##*/}
           echo "Branch atual: $BRANCH_NAME"
 
+          echo "🔑 Autenticando o GitHub CLI..."
+          echo "${GH_TOKEN}" | gh auth login --with-token
+
+          echo "🔍 Verificando PR existente..."
           EXISTING_PR=$(gh pr list --head "$BRANCH_NAME" --base develop --json number --jq '.[0].number' || true)
 
           if [ -z "$EXISTING_PR" ]; then
+            echo "🆕 Criando nova PR para develop..."
             gh pr create \
               --base develop \
               --head "$BRANCH_NAME" \
               --title "Merge automático da feature: $BRANCH_NAME" \
               --body "PR criada automaticamente após validação da branch **$BRANCH_NAME**."
           else
-            echo "PR já existe (#$EXISTING_PR)"
+            echo "⚙️ PR já existe (#$EXISTING_PR)"
           fi
