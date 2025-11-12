@@ -1,4 +1,4 @@
-name: Criar PR automática da Develop para Main
+name: Sugerir PR de Develop para Main
 
 on:
   push:
@@ -6,29 +6,14 @@ on:
       - develop
 
 jobs:
-  create-release-pr:
+  suggest-release:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
-
     steps:
-      - name: Checkout completo
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Criar PR de release
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Mensagem de sugestão
         run: |
-          EXISTING_PR=$(gh pr list --head develop --base main --json number --jq '.[0].number' || true)
-          if [ -z "$EXISTING_PR" ]; then
-            gh pr create \
-              --base main \
-              --head develop \
-              --title "Release automática" \
-              --body "PR gerada automaticamente após atualizações na develop."
-          else
-            echo "PR de release já existente (#$EXISTING_PR)"
-          fi
+          echo "✅ Atualização detectada na branch 'develop'."
+          echo "ℹ️ Crie manualmente uma Pull Request para 'main' quando desejar liberar uma nova versão."
