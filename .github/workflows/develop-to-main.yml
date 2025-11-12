@@ -1,0 +1,19 @@
+name: Sugerir PR de Develop para Main
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  suggest-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Mensagem de sugestão
+        run: |
+          echo "✅ Atualização detectada na branch 'develop'."
+          echo "ℹ️ Crie manualmente uma Pull Request para 'main' quando desejar liberar uma nova versão."

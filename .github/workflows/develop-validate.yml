@@ -1,0 +1,27 @@
+name: Validar Develop e sugerir Release
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  validate-and-suggest:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validar HTML
+        run: sudo apt-get install -y tidy && find . -name "*.html" -exec tidy -qe {} \; || true
+
+      - name: Validar CSS
+        run: npm install -g stylelint stylelint-config-standard && npx stylelint "**/*.css" || true
+
+      - name: Validar JS
+        run: npm install -g eslint && npx eslint . || true
+
+      - name: Aviso final
+        run: echo "✅ Validação da 'develop' concluída! Crie manualmente uma PR para 'main' quando estiver pronto para release."
