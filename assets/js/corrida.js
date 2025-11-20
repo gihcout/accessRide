@@ -16,7 +16,8 @@ let partidaCoords = null,
     animationElapsed = 0,        // tempo acumulado da animação (para progressos)
     routeTraveled = null,        // parte da rota já percorrida
     routeRemaining = null,       // parte da rota restante
-    corridaCancelada = false;    // indica se o usuário cancelou a corrida
+    corridaCancelada = false,    // indica se o usuário cancelou a corrida
+    formaPagamentoEscolhida = null; // forma que a corrida será paga pelo usuário
 
 // Ícone do carro
 const carIcon = L.divIcon({
@@ -206,6 +207,15 @@ btnConfirm.addEventListener('click', () => {
     return showAlert("Por favor, selecione seus equipamentos antes de confirmar.");
   if (!tipo)
     return showAlert("Escolha o tipo de solicitação antes de confirmar.");
+
+  const pagamentoSelecionado = document.querySelector('input[name="formaPagamento"]:checked');
+  if (!pagamentoSelecionado) {
+      el("erroPagamento").classList.remove("hidden");
+      return;
+  }
+
+  el("erroPagamento").classList.add("hidden");
+  formaPagamentoEscolhida = pagamentoSelecionado.value;
 
   // ====== [1] Fluxo de agendamento: data e hora ======
   if (tipo === 'agendar') {
@@ -514,12 +524,31 @@ function finalizarCorrida() {
   modalEncontrado.classList.add('hidden');
   modalProcurando.innerHTML = `
     <h3 class="text-2xl font-bold text-[#38e07b] mb-2">Viagem concluída!</h3>
+
     <p class="text-[#9eb7a8] mb-3">Obrigado por usar AccessRide.</p>
+
+    <p class="text-white font-semibold mb-1">
+        Forma de pagamento:
+    </p>
+
+    <p class="text-[#38e07b] font-bold mb-4">
+        ${formaPagamentoEscolhida}
+    </p>
+
+    <p class="text-[#9eb7a8] mb-4">
+        Por favor, realize o pagamento diretamente ao motorista.
+    </p>
+
     <p class="text-[#9eb7a8] mb-3">Avalie sua experiência:</p>
+
     <div id="avaliacao" class="flex justify-center gap-2 mb-3">
-      ${[1,2,3,4,5].map(n => `<span class="estrela cursor-pointer text-2xl transition-transform hover:scale-125">⭐</span>`).join('')}
+        ${[1,2,3,4,5].map(n => `<span class="estrela cursor-pointer text-2xl transition-transform hover:scale-125">⭐</span>`).join('')}
     </div>
-    <button id="btnEnviarAvaliacao" class="mt-3 py-2 px-4 bg-[#38e07b] text-[#111714] font-bold rounded-lg hover:bg-green-400">Enviar Avaliação</button>
+
+    <button id="btnEnviarAvaliacao"
+            class="mt-3 py-2 px-4 bg-[#38e07b] text-[#111714] font-bold rounded-lg hover:bg-green-400">
+        Enviar Avaliação
+    </button>
   `;
   modalProcurando.classList.remove('hidden');
   ensureCloseButton();

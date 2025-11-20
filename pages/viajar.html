@@ -154,6 +154,25 @@
                         class="w-full bg-[#29382f] text-white rounded-lg p-3">
                 </div>
 
+                <div id="pagamentoContainer" class="mt-6">
+                    <label class="block text-white mb-2">Forma de pagamento</label>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <label class="flex items-center bg-[#29382f] text-white rounded-lg p-3 cursor-pointer hover:bg-[#325041] transition">
+                            <input type="radio" name="formaPagamento" value="PIX" class="hidden peer" />
+                            <span class="w-5 h-5 border-2 border-green-400 rounded-full flex items-center justify-center mr-3 peer-checked:bg-[#38e07b] peer-checked:border-[#38e07b] transition"></span>
+                            <span class="text-sm font-medium">PIX</span>
+                        </label>
+                        <label class="flex items-center bg-[#29382f] text-white rounded-lg p-3 cursor-pointer hover:bg-[#325041] transition">
+                            <input type="radio" name="formaPagamento" value="Dinheiro" class="hidden peer" />
+                            <span class="w-5 h-5 border-2 border-green-400 rounded-full flex items-center justify-center mr-3 peer-checked:bg-[#38e07b] peer-checked:border-[#38e07b] transition"></span>
+                            <span class="text-sm font-medium">Dinheiro</span>
+                        </label>
+                    </div>
+                    <p id="erroPagamento" class="hidden text-red-400 text-sm mt-2">
+                        ⚠️ Selecione uma forma de pagamento.
+                    </p>
+                </div>
+
                 <div class="mt-6 flex gap-3 items-start">
                     <button id="btnTracar" class="py-2 px-4 bg-[#38e07b] text-[#111714] font-bold rounded-lg hover:bg-green-400">Consultar preço</button>
                     <button id="btnConfirm" class="py-2 px-4 bg-[#38e07b] text-[#111714] font-bold rounded-lg hover:bg-green-400 hidden">Confirmar carona</button>
