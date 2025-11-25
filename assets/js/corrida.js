@@ -97,10 +97,17 @@ function setButtonState(state) {
 }
 
 async function geocode(local) {
-  const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(local)}`);
+  const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&q=${encodeURIComponent(local)}`);
   const data = await res.json();
-  if (!data.length) throw new Error("Local não encontrado");
-  return [parseFloat(data[0].lat), parseFloat(data[0].lon)];
+  
+  if (!data.length)
+    throw new Error("Local não encontrado");
+  const item = data[0];
+
+  if (!isInSaoPaulo(item.address)) {
+    throw new Error("Endereço fora de São Paulo");
+  }
+  return [parseFloat(item.lat), parseFloat(item.lon)];
 }
 
 function escolherModelo() {
@@ -160,8 +167,12 @@ btnTracar.addEventListener('click', async () => {
     [partidaCoords, destinoCoords] = await Promise.all([geocode(partidaTxt), geocode(destinoTxt)]);
   } catch (err) {
     console.error(err);
-    return showAlert("Não foi possível localizar os endereços");
+    if (err.message.includes("São Paulo"))
+      return showAlert("Este serviço está disponível apenas para o estado de São Paulo.");
+    
+    return showAlert("Não foi possível localizar os endereços.");
   }
+
 
   control = L.Routing.control({
     waypoints: [L.latLng(...partidaCoords), L.latLng(...destinoCoords)],
@@ -715,3 +726,10 @@ function resetViagem() {
 
 setupAutocomplete('partida');
 setupAutocomplete('destino');
+
+function isInSaoPaulo(address) {
+  if (!address) return false;
+
+  const state = address.state || address.state_district || "";
+  return state.toLowerCase().includes("são paulo") || state.toLowerCase().includes("sao paulo");
+}
