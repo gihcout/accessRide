@@ -684,5 +684,34 @@ function setupAutocomplete(inputId) {
   });
 }
 
+function resetViagem() {
+  corridaCancelada = true;
+  if (animationInterval) clearInterval(animationInterval);
+  animationInterval = null;
+
+  if (motoristaMarker) {
+    map.removeLayer(motoristaMarker);
+    motoristaMarker = null;
+  }
+
+  if (routePolyline) map.removeLayer(routePolyline);
+  if (routeTraveled) map.removeLayer(routeTraveled);
+  if (routeRemaining) map.removeLayer(routeRemaining);
+
+  removerControle(control);
+  removerControle(driverRouter);
+  control = null;
+  driverRouter = null;
+  el("resultado").classList.add("hidden");
+  toggleCamposViagem(false);
+  setButtonState("preRota");
+}
+
+["partida", "destino"].forEach(id => {
+  el(id).addEventListener("input", () => {
+    resetViagem();
+  });
+});
+
 setupAutocomplete('partida');
 setupAutocomplete('destino');
