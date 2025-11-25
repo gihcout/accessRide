@@ -1,0 +1,52 @@
+-- Estrutura base de Usuário
+CREATE TABLE Usuario (
+    id SERIAL PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL,
+    telefone VARCHAR(20),
+    email VARCHAR(255) UNIQUE NOT NULL,
+    senha VARCHAR(255) NOT NULL, -- Deve ser um hash na prática
+    tipo_usuario VARCHAR(50) NOT NULL CHECK (tipo_usuario IN ('Passageiro', 'Motorista', 'Admin')),
+    data_nascimento DATE,
+    status VARCHAR(50) NOT NULL DEFAULT 'Ativo'
+);
+
+-- Tabela de Passageiro
+CREATE TABLE Passageiro (
+    id_usuario INTEGER PRIMARY KEY REFERENCES Usuario(id),
+    cpf VARCHAR(14) UNIQUE NOT NULL,
+    condicao_especial TEXT
+);
+
+-- Tabela de Motorista
+CREATE TABLE Motorista (
+    id_usuario INTEGER PRIMARY KEY REFERENCES Usuario(id),
+    cnh VARCHAR(50) UNIQUE NOT NULL,
+    curso_access BOOLEAN DEFAULT FALSE,
+    curso_transp_acessivel BOOLEAN DEFAULT FALSE,
+    disponibilidade BOOLEAN DEFAULT FALSE,
+    media_avaliacao DECIMAL(2, 1) DEFAULT 5.0
+);
+
+-- Tabela de Veiculo
+CREATE TABLE Veiculo (
+    id SERIAL PRIMARY KEY,
+    id_motorista INTEGER UNIQUE REFERENCES Motorista(id_usuario),
+    modelo VARCHAR(100),
+    placa VARCHAR(10) UNIQUE,
+    ano INTEGER,
+    possui_adaptacao BOOLEAN DEFAULT FALSE,
+    csv_valido BOOLEAN DEFAULT FALSE,
+    status_aprovacao VARCHAR(50) NOT NULL DEFAULT 'Pendente' CHECK (status_aprovacao IN ('Pendente', 'Aprovado', 'Reprovado'))
+);
+
+-- Tabela de Corrida
+CREATE TABLE Corrida (
+    id SERIAL PRIMARY KEY,
+    id_passageiro INTEGER REFERENCES Passageiro(id_usuario),
+    id_motorista INTEGER REFERENCES Motorista(id_usuario),
+    origem VARCHAR(255) NOT NULL,
+    destino VARCHAR(255) NOT NULL,
+    data_hora TIMESTAMP WITHOUT TIME ZONE,
+    status VARCHAR(50) NOT NULL CHECK (status IN ('Aguardando', 'Em Andamento', 'Concluída', 'Cancelada')),
+    valor DECIMAL(10, 2)
+);
