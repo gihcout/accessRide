@@ -1,343 +1,253 @@
+<!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <base href="/accessRide/">
-    
-    <!-- Tailwind -->
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AcessRide - Chatbot</title>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #ffffff;
+    }
 
-    <!-- CSS externo -->
-    <link rel="stylesheet" href="assets/css/main.css">
+    /* Botão flutuante */
+    #chat-button {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 65px;
+      height: 65px;
+      border-radius: 50%;
+      background: #3db36b;
+      border: 3px solid #1a1a1a;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 30px;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+      transition: 0.3s;
+    }
 
-    <!-- JS externo -->
-    <script src="assets/js/main.js" defer></script>
-  </head>
+    #chat-button:hover {
+      transform: scale(1.08);
+    }
 
-  <body class="bg-[#111714] font-[Spline_Sans]">
-    <div class="relative flex size-full min-h-screen flex-col dark group/design-root overflow-x-hidden">
-    <div id="header"></div>
+    /* Janela do chat */
+    #chat-container {
+      position: fixed;
+      bottom: 95px;
+      right: 20px;
+      width: 340px;
+      height: 450px;
+      background: #ffffff;
+      border-radius: 18px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+      overflow: hidden;
+      display: none;
+      flex-direction: column;
+      border: 2px solid #1a1a1a;
+    }
 
-      <main class="flex-grow">
-      <section class="relative min-h-[60vh] flex items-center justify-center text-white text-center px-4" id="home">
-        <div class="absolute inset-0 bg-cover bg-center"
-          style='background-image: linear-gradient(rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.8) 100%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuDBjArHwHL5qj32QLZZwQDagAEJgJvOlP8-nHeXw_KKy-Wvq7E-sg1t7UlPUoSEYql2uI8qw9gmACxZAAoAO4iTTkQuJBmNRd5CFk-5lfGLvChTmQGY9hjlXKi5Fe2DFd9h6ZCLEXRyRN6wORiF1FvYzyPhyeXIU1b5IKTnoBR3XoZQuNC1_LYQ8vnNiGlDMKEuDwjCBF3kkoErZyQkG1BpKfxVS1IzBKGWsOKiIacKAiCpFBB_7erjFtpKsuUtrSmDLsbS0uheXOi1");'>
-        </div>
+    #chat-header {
+      background: #3db36b;
+      padding: 14px;
+      color: white;
+      font-size: 18px;
+      font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #1a1a1a;
+    }
 
-        <div class="relative z-10 max-w-3xl mx-auto">
-          <h1 class="text-5xl md:text-7xl font-black tracking-tighter mb-4">
-            Sua Cidade, Acessível</h1>
-          <p class="text-lg md:text-xl text-gray-300 mb-8">O AccessRide é um serviço de transporte por aplicativo
-            desenvolvido com foco na acessibilidade. Oferecemos transporte seguro, confiável e inclusivo para todos.</p>
-          <button
-            class="flex mx-auto min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-12 px-6 bg-[#38e07b] text-[#111714] text-base font-bold leading-normal tracking-[0.015em] hover:bg-green-400 transition-colors">
-            <a href="./pages/viajar.html" class="truncate">
-              Solicite uma viagem agora</a>
-          </button>
-        </div>
-      </section>
+    #chat-messages {
+      flex: 1;
+      padding: 12px;
+      overflow-y: auto;
+      background: #ffffff;
+    }
 
-      <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
-        <section class="mb-16 sm:mb-24" id="services">
-          <h2 class="text-3xl font-bold text-white mb-8 text-center">
-            Opções de veículos acessíveis</h2>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div class="flex flex-col gap-4 rounded-lg bg-[#1c2620] p-6 text-center">
-              <img alt="Wheelchair Accessible Vehicle" class="w-full h-48 object-cover rounded-lg mb-4"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuB2Pi6c1WcZm_HfWgg6G12410ICDgHGvH17NMY1oS5QVvJfqlWGQ35EVlzOY7zkCjJHG5SB2XDhtFZehOimYrCc63qXanWoCBjb3RmcOai15y9B-Lg6IiftDOp1mFOX09WTfbGdLucsw_IS29fT3NbnwqhSups4R5ki7MjjtuxhNWT4DRQcE7o9TuHRFRIPVKBP21GwIXF8qeOjUPjaJRsvo1g1e2P8e9FPMNeKWGCVjPTXVPfe8JbHMB-q-JQPBAs-xGesAL8HLFNj" />
-              <h3 class="text-xl font-medium text-white">
-                Veículos acessíveis para cadeiras de rodas</h3>
-              <p class="text-[#9eb7a8] text-sm">Veículos com rampas ou elevadores para acomodar cadeiras de rodas e
-                dispositivos de mobilidade.</p>
-            </div>
+    .message {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 14px;
+      max-width: 90%;
+    }
 
-            <div class="flex flex-col gap-4 rounded-lg bg-[#1c2620] p-6 text-center">
-              <img alt="Enhanced Legroom Sedan" class="w-full h-48 object-cover rounded-lg mb-4"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCoRTcjYSFDTm_Ff-a5tcfWY5y-fuzmY7_-1_ANzpl6Kaa9kUQp-MZUk3X8WcB7ystm7iMnBlU8aT0ZmmCzwf76bcLO6V3XnZNKlaS06qP3ZYhF0dWa43J5W7oteDt4Yp3h468PGqY6cyzoSExTfQoNrqXs-35oFuLewhT2dapnng6fp7cLUftZEmWJn-UftcXAI60d6S3lYMfQOI42Y-gPhpGCw_7qHz8CehDfH5AGgSa57jRLa4fvrRitN0ZAY19vRbyqwmBByAaB" />
-              <h3 class="text-xl font-medium text-white">Sedans com espaço para as pernas aprimorado</h3>
-              <p class="text-[#9eb7a8] text-sm">Sedans com mais espaço para as pernas e portas mais largas para
-                facilitar o acesso.</p>
-            </div>
+    .bubble {
+      background: #e9e9e9;
+      padding: 10px 14px;
+      border-radius: 14px;
+      border: 1px solid #1a1a1a;
+      font-size: 14px;
+      line-height: 1.4;
+    }
 
-            <div class="flex flex-col gap-4 rounded-lg bg-[#1c2620] p-6 text-center">
-              <img alt="Foldable Seat Minivan" class="w-full h-48 object-cover rounded-lg mb-4"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZR5oRSvTDDPRCuZDTp4jLD7fvg6p2s_s-H2dEt_SSDknv_LZmlUYlbESvzVy0NPs_Xw3mukn7ufddtp-_LB8UPAHYPHDpe4OvJJD7NWf-gnV_qet_5yA5yIWFWITfNdiAm1c43ST6peNt__yhS7J_991fnq4g7wVDmMfDmGHOHfM-f7Vpb1v5zZHm5JNcxiJEdLgVQ1x86o83sa3Ung_kecCe_zO07HgYJMoEOGYJ_vJb61x6cNczOJM0sgUglGBcsBf4MHAcLzLS" />
-              <h3 class="text-xl font-medium text-white">
-                Minivans com assentos dobráveis</h3>
-              <p class="text-[#9eb7a8] text-sm">Minivans com assentos flexíveis para atender a diversas necessidades.
-              </p>
-            </div>
-          </div>
-        </section>
+    .user .bubble {
+      background: #3db36b;
+      color: #ffffff;
+      margin-left: auto;
+    }
 
-        <section class="max-w-4xl mx-auto grid md:grid-cols-2 gap-12 items-center mb-16 sm:mb-24">
-          <div class="space-y-6">
-            <h2 class="text-3xl font-bold text-white">
-              Personalize seu passeio &amp; Estimativa de tarifa</h2>
-            <div class="space-y-4">
-              <select
-                class="form-select w-full rounded-xl text-white bg-[#29382f] border-none focus:ring-[#38e07b] h-14 p-4 text-base">
-                <option selected="">
-                  Selecione as necessidades</option>
-                <option>Suporte para Deficiência Visual</option>
-                <option>Suporte para Deficiência Auditiva</option>
-                <option>Animal de serviço</option>
-              </select>
+    .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 2px solid #1a1a1a;
+    }
 
-              <select
-                class="form-select w-full rounded-xl text-white bg-[#29382f] border-none focus:ring-[#38e07b] h-14 p-4 text-base">
-                <option selected="">Selecione o equipamento</option>
-                <option>Cadeira de rodas dobrável</option>
-                <option>Cadeira de rodas elétrica</option>
-                <option>
-                  Caminhante</option>
-              </select>
+    #chat-input {
+      display: flex;
+      border-top: 2px solid #1a1a1a;
+    }
 
-              <input
-                class="form-input w-full rounded-xl text-white bg-[#29382f] border-none focus:ring-[#38e07b] h-14 placeholder:text-[#9eb7a8] p-4 text-base"
-                placeholder="Local de Partida" />
-              <input
-                class="form-input w-full rounded-xl text-white bg-[#29382f] border-none focus:ring-[#38e07b] h-14 placeholder:text-[#9eb7a8] p-4 text-base"
-                placeholder="Local de Chegada" />
-            </div>
+    #user-input {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      outline: none;
+      font-size: 14px;
+    }
 
-            <button
-              class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-12 px-6 bg-[#38e07b] text-[#111714] text-base font-bold leading-normal tracking-[0.015em] hover:bg-green-400 transition-colors">
-              <a href="./pages/viajar.html" class="truncate">Ver Preço</a>
-            </button>
-          </div>
+    #send-btn {
+      background: #3db36b;
+      border: none;
+      color: white;
+      padding: 0 16px;
+      cursor: pointer;
+      font-size: 18px;
+      border-left: 2px solid #1a1a1a;
+    }
+  </style>
+</head>
+<body>
 
-          <div class="space-y-6">
-            <h2 class="text-3xl font-bold text-white">
-              Como funciona o AccessRide</h2>
-            <div class="relative pl-10">
-              <div class="absolute left-4 top-2 h-[82%] border-l-2 border-dashed border-[#3d5245]"></div>
-              <div class="relative mb-8">
-                <div
-                  class="absolute -left-10 top-0.5 flex size-8 items-center justify-center rounded-full bg-[#38e07b] text-[#111714]">
-                  1</div>
-                <h3 class="text-xl font-medium text-white">
-                  Solicite uma carona</h3>
-                <p class="text-[#9eb7a8]">
-                  Especifique suas necessidades de acessibilidade e equipamentos no aplicativo.</p>
-              </div>
+<button id="chat-button">💬</button>
 
-              <div class="relative mb-8">
-                <div
-                  class="absolute -left-10 top-0.5 flex size-8 items-center justify-center rounded-full bg-[#38e07b] text-[#111714]">
-                  2</div>
-                <h3 class="text-xl font-medium text-white">
-                  Conheça seu motorista</h3>
-                <p class="text-[#9eb7a8]">
-                  Nossos motoristas treinados chegarão em um veículo adequado e acessível.</p>
-              </div>
+<div id="chat-container">
+  <div id="chat-header">
+    AcessRide - Assistente
+    <span id="close-chat" style="cursor:pointer;font-size:22px;">×</span>
+  </div>
 
-              <div class="relative">
-                <div
-                  class="absolute -left-10 top-0.5 flex size-8 items-center justify-center rounded-full bg-[#38e07b] text-[#111714]">
-                  3</div>
-                <h3 class="text-xl font-medium text-white">
-                  Aproveite seu passeio</h3>
-                <p class="text-[#9eb7a8]">
-                  Experimente uma viagem confortável e segura até seu destino.</p>
-              </div>
-            </div>
-          </div>
-        </section>
+  <div id="chat-messages"></div>
 
-        <section class="mb-16 sm:mb-24" id="safety">
-          <h2 class="text-3xl font-bold text-white mb-8 text-center">
-            Segurança e Confiança</h2>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div class="flex flex-col items-center gap-4 text-center rounded-lg bg-[#1c2620] p-6">
-              <span class="material-symbols-outlined text-4xl text-[#38e07b]">verified_user</span>
-              <h3 class="text-xl font-bold text-white">Treinados &amp;
-                Drivers verificados</h3>
-              <p class="text-[#9eb7a8] text-sm">Todos os motoristas passam por rigorosas verificações de antecedentes e
-                treinamento especializado em acessibilidade.</p>
-            </div>
+  <div id="chat-input">
+    <input id="user-input" type="text" placeholder="Digite aqui..." />
+    <button id="send-btn">➤</button>
+  </div>
+</div>
 
-            <div class="flex flex-col items-center gap-4 text-center rounded-lg bg-[#1c2620] p-6">
-              <span class="material-symbols-outlined text-4xl text-[#38e07b]">groups</span>
-              <h3 class="text-xl font-bold text-white">Apoio Comunitário</h3>
-              <p class="text-[#9eb7a8] text-sm">Nós promovemos uma comunidade solidária e inclusiva para passageiros e
-                motoristas.</p>
-            </div>
+<script>
+let step = 0;
+const avatar = "https://i.pravatar.cc/150?img=12";
 
-            <div class="flex flex-col items-center gap-4 text-center rounded-lg bg-[#1c2620] p-6">
-              <span class="material-symbols-outlined text-4xl text-[#38e07b]">grade</span>
-              <h3 class="text-xl font-bold text-white">
-                Avaliado pelos passageiros</h3>
-              <p class="text-[#9eb7a8] text-sm">
-                Seu feedback nos ajuda a manter altos padrões e melhorias contínuas.</p>
-            </div>
-          </div>
-        </section>
+const messages = document.getElementById("chat-messages");
 
-        <section
-          class="bg-[#1c2620] rounded-xl p-8 sm:p-12 flex flex-col md:flex-row items-center justify-between gap-8 mb-16 sm:mb-24"
-          id="drivers">
-          <div>
-            <h2 class="text-3xl font-bold text-white mb-2">
-              Torne-se um motorista AccessRide</h2>
-            <p class="text-[#9eb7a8] max-w-lg">Junte-se à nossa equipe de motoristas dedicados e faça a diferença na sua
-              comunidade. Oferecemos horários flexíveis, salários competitivos e a oportunidade de prestar um serviço
-              essencial.</p>
-          </div>
+function addMessage(text, sender="bot") {
+  const msg = document.createElement("div");
+  msg.className = "message " + sender;
 
-          <button
-            class="flex-shrink-0 min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-12 px-6 bg-[#38e07b] text-[#111714] text-base font-bold leading-normal tracking-[0.015em] hover:bg-green-400 transition-colors">
-            <span class="truncate">Inscreva-se agora</span>
-          </button>
-        </section>
+  if (sender === "bot") {
+    msg.innerHTML = `
+      <img class="avatar" src="${avatar}" />
+      <div class="bubble">${text}</div>
+    `;
+  } else {
+    msg.innerHTML = `
+      <div class="bubble">${text}</div>
+    `;
+  }
 
-        <section class="mb-16 sm:mb-24" id="testimonials">
-          <h2 class="text-3xl font-bold text-white mb-8 text-center">O que nossos pilotos estão dizendo</h2>
-          <div class="relative">
-            <div class="flex overflow-x-auto snap-x snap-mandatory scroll-smooth scrollbar-hide gap-8 pb-4">
-              <div class="snap-center w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.333rem)] flex-shrink-0">
-                <div class="bg-[#1c2620] rounded-lg p-6 h-full flex flex-col justify-between">
-                  <div class="flex items-center mb-2">
-                    <span class="material-symbols-outlined text-[#38e07b]">star</span>
-                    <span class="material-symbols-outlined text-[#38e07b]">star</span>
-                    <span class="material-symbols-outlined text-[#38e07b]">star</span>
-                    <span class="material-symbols-outlined text-[#38e07b]">star</span>
-                    <span class="material-symbols-outlined text-[#38e07b]">star</span>
-                  </div>
+  messages.appendChild(msg);
+  messages.scrollTop = messages.scrollHeight;
+}
 
-                  <blockquote class="text-[#9eb7a8] italic mb-4">"O AccessRide foi uma salvação. Os motoristas são muito
-                    prestativos e os veículos estão sempre limpos e bem equipados para minha cadeira de rodas.
-                    Finalmente recuperei minha independência."</blockquote>
-                  <cite class="text-white font-bold not-italic">Sarah L.</cite>
-                </div>
-              </div>
+function chatbotFlow(userText) {
+  if (!userText) {
+    addMessage("Caso tenha interesse, pode nos contratar a hora que quiser 😊");
+    step = 999;
+    return;
+  }
 
-              <div class="snap-center w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.333rem)] flex-shrink-0">
-                <div class="bg-[#1c2620] rounded-lg p-6 h-full flex flex-col justify-between">
-                  <div class="flex items-center mb-2">
-                    <span class="material-symbols-outlined text-[#38e07b]">star</span>
-                    <span class="material-symbols-outlined text-[#38e07b]">star</span>
-                    <span class="material-symbols-outlined text-[#38e07b]">star</span>
-                    <span class="material-symbols-outlined text-[#38e07b]">star</span>
-                    <span class="material-symbols-outlined text-[#38e07b]">star</span>
-                  </div>
+  if (step === 0) {
+    addMessage(`Perfeito, ${userText}! Qual o tipo de carro solicitado?`);
+    addMessage("1. Carro com rampa<br>2. Porta ampla<br>3. Espaço para cadeira");
+    step = 1;
+    return;
+  }
 
-                  <blockquote class="text-[#9eb7a8] italic mb-4">"Como pessoa com deficiência visual, aprecio os
-                    recursos de acessibilidade do aplicativo. É fácil de usar e me sinto seguro sabendo que os
-                    motoristas são treinados para me ajudar."</blockquote>
-                  <cite class="text-white font-bold not-italic">David C.</cite>
-                </div>
-              </div>
+  if (step === 1) {
+    addMessage("Qual o destino?");
+    step = 2;
+    return;
+  }
 
-              <div class="snap-center w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.333rem)] flex-shrink-0">
-                <div class="bg-[#1c2620] rounded-lg p-6 h-full flex flex-col justify-between">
-                  <div class="flex items-center mb-2">
-                    <span class="material-symbols-outlined text-[#38e07b]">star</span>
-                    <span class="material-symbols-outlined text-[#38e07b]">star</span>
-                    <span class="material-symbols-outlined text-[#38e07b]">star</span>
-                    <span class="material-symbols-outlined text-[#38e07b]">star</span>
-                    <span class="material-symbols-outlined text-gray-500">star</span>
-                  </div>
+  if (step === 2) {
+    addMessage("Qual a forma de pagamento?");
+    addMessage("1. Cartão de crédito<br>2. Cartão de débito<br>3. PIX<br>4. Dinheiro");
+    step = 3;
+    return;
+  }
 
-                  <blockquote class="text-[#9eb7a8] italic mb-4">"Finalmente, um serviço de transporte que pode acomodar
-                    toda a minha família e o andador do meu filho sem complicações. As minivans são espaçosas e os
-                    motoristas são pacientes."</blockquote>
-                  <cite class="text-white font-bold not-italic">Maria G.</cite>
-                </div>
-              </div>
+  if (step === 3) {
+    addMessage("Perfeito! Corrida solicitada com sucesso 🚗💨");
 
-              <div class="snap-center w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.333rem)] flex-shrink-0">
-                <div class="bg-[#1c2620] rounded-lg p-6 h-full flex flex-col justify-between">
-                  <div class="flex items-center mb-2">
-                    <span class="material-symbols-outlined text-[#38e07b]">star</span>
-                    <span class="material-symbols-outlined text-[#38e07b]">star</span>
-                    <span class="material-symbols-outlined text-[#38e07b]">star</span>
-                    <span class="material-symbols-outlined text-[#38e07b]">star</span>
-                    <span class="material-symbols-outlined text-[#38e07b]">star</span>
-                  </div>
-                  <blockquote class="text-[#9eb7a8] italic mb-4">"Atendimento excelente! O sedã com mais espaço para as
-                    pernas foi perfeito para as minhas necessidades pós-cirúrgicas. Tornou o acesso às minhas consultas
-                    muito mais confortável."</blockquote>
-                  <cite class="text-white font-bold not-italic">John P.</cite>
-                </div>
-              </div>
-            </div>
+    setTimeout(() => {
+      addMessage("Motorista a caminho ✅<br><br>O motorista Carlos Oliveira está a caminho em um Fiat Doblo Adaptado, placa ABC-4F56.<br>Tempo estimado: 6 minutos.");
 
-            <div class="absolute inset-y-0 left-0 hidden md:flex items-center">
-              <button
-                class="bg-[#1c2620] rounded-full p-2 text-white hover:bg-[#38e07b] hover:text-[#111714] transition-colors -ml-4">
-                <span class="material-symbols-outlined">chevron_left</span>
-              </button>
-            </div>
+      setTimeout(() => {
+        addMessage("Ebaa! Carlos Oliveira chegou! 🎉");
 
-            <div class="absolute inset-y-0 right-0 hidden md:flex items-center">
-              <button
-                class="bg-[#1c2620] rounded-full p-2 text-white hover:bg-[#38e07b] hover:text-[#111714] transition-colors -mr-4">
-                <span class="material-symbols-outlined">chevron_right</span>
-              </button>
-            </div>
-          </div>
-        </section>
+        setTimeout(() => {
+          addMessage("O tempo de viagem é de 45 minutos.");
 
-        <section class="max-w-3xl mx-auto text-center mb-16 sm:mb-24" id="about">
-          <h2 class="text-3xl font-bold text-white mb-4">Baixe o aplicativo AccessRide</h2>
-          <p class="text-[#9eb7a8] mb-8">Comece a usar o AccessRide hoje mesmo. O futuro do transporte acessível está ao
-            seu alcance.</p>
-          <div class="flex justify-center gap-4 flex-wrap">
-            <button
-              class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-12 px-6 bg-[#29382f] text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-gray-700 transition-colors">
-              <span class="truncate">
-                Baixe na App Store</span>
-            </button>
+          setTimeout(() => {
+            addMessage("Você chegou ao seu destino! Para a próxima corrida, preparamos um cupom de 5% de desconto 😊");
+          }, 10000);
 
-            <button
-              class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-12 px-6 bg-[#29382f] text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-gray-700 transition-colors">
-              <span class="truncate">
-                Disponível no Google Play</span>
-            </button>
-          </div>
-        </section>
+        }, 10000);
 
-        <section class="max-w-3xl mx-auto">
-          <h2 class="text-3xl font-bold text-white mb-8 text-center">
-            Perguntas frequentes</h2>
-          <div class="space-y-4">
-            <details class="group bg-[#29382f] rounded-xl p-4 cursor-pointer">
-              <summary class="flex items-center justify-between text-white font-medium list-none">Que tipos de veículos
-                estão disponíveis? <span
-                  class="material-symbols-outlined transition-transform group-open:rotate-180">expand_more</span>
-              </summary>
-              <p class="text-[#9eb7a8] mt-2">A AccessRide oferece uma variedade de veículos acessíveis, incluindo vans
-                com acesso para cadeira de rodas, sedãs com espaço para as pernas e minivans com assentos dobráveis.
-                Você pode especificar suas necessidades e equipamentos ao solicitar uma viagem.</p>
-            </details>
+      }, 5000);
+    }, 2000);
 
-            <details class="group bg-[#29382f] rounded-xl p-4 cursor-pointer">
-              <summary class="flex items-center justify-between text-white font-medium list-none">
-                Como posso solicitar uma viagem acessível? <span
-                  class="material-symbols-outlined transition-transform group-open:rotate-180">expand_more</span>
-              </summary>
-              <p class="text-[#9eb7a8] mt-2">Basta abrir o aplicativo AccessRide, inserir seu destino e selecionar as
-                opções de acessibilidade desejadas no menu "Personalizar Viagem" antes de confirmar sua solicitação. O
-                aplicativo conectará você automaticamente a um motorista e veículo adequados.</p>
-            </details>
+    step = 999;
+    return;
+  }
+}
 
-            <details class="group bg-[#29382f] rounded-xl p-4 cursor-pointer">
-              <summary class="flex items-center justify-between text-white font-medium list-none">
-                Quais medidas de segurança estão em vigor? <span
-                  class="material-symbols-outlined transition-transform group-open:rotate-180">expand_more</span>
-              </summary>
-              <p class="text-[#9eb7a8] mt-2">A segurança é nossa principal prioridade. Todos os motoristas passam por
-                verificações de antecedentes rigorosas, recebem treinamento contínuo e todas as viagens são rastreadas
-                por GPS. Também temos uma equipe de suporte 24 horas por dia, 7 dias por semana, pronta para ajudar você
-                a qualquer momento.</p>
-            </details>
-          </div>
-        </section>
-        
-      </div>
-    </main>
+// Enviar mensagem
+const sendBtn = document.getElementById("send-btn");
+const input = document.getElementById("user-input");
 
-    <div id="footer"></div>
+sendBtn.onclick = () => {
+  const text = input.value.trim();
+  if (text === "") return;
+  addMessage(text, "user");
+  chatbotFlow(text);
+  input.value = "";
+};
 
-    </div>
-  </body>
+// Abrir e fechar
+const chatButton = document.getElementById("chat-button");
+const chatContainer = document.getElementById("chat-container");
+const closeChat = document.getElementById("close-chat");
+
+chatButton.onclick = () => chatContainer.style.display = "flex";
+closeChat.onclick = () => chatContainer.style.display = "none";
+
+// Mensagem automática inicial
+setTimeout(() => {
+  addMessage("Olá! Seja bem-vindo(a) ao aplicativo de corridas acessíveis AcessRide 😊");
+  setTimeout(() => addMessage("Qual seu nome?"), 1200);
+}, 800);
+</script>
+
+</body>
 </html>
+
