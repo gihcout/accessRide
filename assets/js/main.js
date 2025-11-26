@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const closeBtn = document.getElementById("closeMenu");
 
         if (!menuBtn || !menu || !closeBtn) return;
+
         menuBtn.onclick = (e) => {
             e.stopPropagation();
             menu.style.transform = "translateX(0)";
@@ -37,19 +38,41 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateRideButton() {
         const isLogged = localStorage.getItem("accessride_logged") === "true";
+        const user = JSON.parse(localStorage.getItem("accessride_user") || "{}");
 
-        const btnDesktop = [...document.querySelectorAll('a')]
-            .find(a => a.href.endsWith('/pages/viajar.html'));
+        // Desktop
+        const btnViajarDesktop = document.getElementById("btnViajarDesktop");
+        const btnLoginDesktop = document.getElementById("btnLoginDesktop");
+        const greetDesktop = document.getElementById("userGreetingDesktop");
 
-        const btnMobile = [...document.querySelectorAll('#menuMobile a')]
-            .find(a => a.href.endsWith('/pages/viajar.html'));
+        // Mobile
+        const btnViajarMobile = document.getElementById("btnViajarMobile");
+        const btnLoginMobile = document.getElementById("btnLoginMobile");
+        const greetMobile = document.getElementById("userGreetingMobile");
 
-        if (!isLogged) {
-            btnDesktop?.classList.add("opacity-40", "pointer-events-none");
-            btnMobile?.classList.add("opacity-40", "pointer-events-none");
+        if (isLogged) {
+            btnViajarDesktop?.classList.remove("opacity-40", "pointer-events-none");
+            btnViajarMobile?.classList.remove("opacity-40", "pointer-events-none");
+
+            btnLoginDesktop?.classList.add("hidden");
+            btnLoginMobile?.classList.add("hidden");
+
+            if (user.name) {
+                greetDesktop.textContent = `Olá, ${user.name}`;
+                greetDesktop.classList.remove("hidden");
+
+                greetMobile.textContent = `Olá, ${user.name}`;
+                greetMobile.classList.remove("hidden");
+            }
         } else {
-            btnDesktop?.classList.remove("opacity-40", "pointer-events-none");
-            btnMobile?.classList.remove("opacity-40", "pointer-events-none");
+            btnViajarDesktop?.classList.add("opacity-40", "pointer-events-none");
+            btnViajarMobile?.classList.add("opacity-40", "pointer-events-none");
+
+            btnLoginDesktop?.classList.remove("hidden");
+            btnLoginMobile?.classList.remove("hidden");
+
+            greetDesktop?.classList.add("hidden");
+            greetMobile?.classList.add("hidden");
         }
     }
 
