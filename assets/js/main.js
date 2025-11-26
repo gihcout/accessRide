@@ -1,16 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // 1️⃣ Detecta automaticamente o ambiente (local ou GitHub Pages)
   const isGithubPages = window.location.hostname.includes('github.io');
-  const repoName = 'accessRide'; // ajuste se o repositório tiver outro nome
+  const repoName = 'accessRide';
   const basePath = isGithubPages ? `/${repoName}/` : '/';
 
-  // 2️⃣ Monta o caminho correto do arquivo de templates
-  // Se estiver em /pages/, precisa subir um nível
   const path = window.location.pathname.includes('/pages/')
     ? `${basePath}components/templates.html`
     : `${basePath}components/templates.html`;
 
-  // 3️⃣ Carrega o arquivo de templates
   fetch(path)
     .then(res => {
       if (!res.ok) throw new Error(`Erro ${res.status} ao carregar ${path}`);
@@ -20,7 +16,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const temp = document.createElement('div');
       temp.innerHTML = html;
 
-      // Função para injetar um template em um seletor
       function injectTemplate(templateId, targetSelector) {
         const tpl = temp.querySelector(`#${templateId}`);
         const target = document.querySelector(targetSelector);
@@ -29,22 +24,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
 
-      // 4️⃣ Insere os templates no documento
       injectTemplate('tpl-head', 'head');
       injectTemplate('tpl-header', '#header');
       injectTemplate('tpl-footer', '#footer');
 
-      // 5️⃣ Ajusta automaticamente os links do header e do footer
       document.querySelectorAll('#header a, #footer a').forEach(link => {
         const href = link.getAttribute('href');
         if (href && !href.startsWith('http')) {
-          // Evita links absolutos
-          const normalized = href.replace(/^(\.?\/)+/, ''); // remove ./ ou ../
+          const normalized = href.replace(/^(\.?\/)+/, ''); 
           link.setAttribute('href', basePath + normalized);
         }
       });
 
-      // 6️⃣ Ajusta imagens também (opcional, mas útil)
       document.querySelectorAll('img').forEach(img => {
         const src = img.getAttribute('src');
         if (src && !src.startsWith('http')) {
@@ -54,4 +45,16 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     })
     .catch(err => console.error('Erro ao carregar templates:', err));
+
+    document.addEventListener("click", () => {
+      const btn = document.getElementById("menuMobileBtn");
+      const menu = document.getElementById("menuMobile");
+      const closeBtn = document.getElementById("closeMenu");
+
+      if (!btn || !menu || !closeBtn) return;
+
+      btn.onclick = () => menu.style.transform = "translateX(0)";
+      closeBtn.onclick = () => menu.style.transform = "translateX(100%)";
+  });
+
 });
