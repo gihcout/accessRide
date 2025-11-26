@@ -7,10 +7,12 @@
         <!-- CSS externo -->
         <link rel="stylesheet" href="../assets/css/main.css">
         <link rel="stylesheet" href="../assets/css/maps.css">
+        <link rel="stylesheet" href="../assets/css/chat.css">
 
         <!-- JS externo -->
         <script src="../assets/js/main.js" defer></script>
         <script src="../assets/js/corrida.js" defer></script>
+        <script src="../assets/js/chatbot.js" defer></script>
 
         <!-- Leaflet -->
         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -167,7 +169,6 @@
                 <div class="mt-6 flex gap-3 items-start">
                     <button id="btnTracar" class="py-2 px-4 bg-[#38e07b] text-[#111714] font-bold rounded-lg hover:bg-green-400">Consultar preço</button>
                     <button id="btnConfirm" class="py-2 px-4 bg-[#38e07b] text-[#111714] font-bold rounded-lg hover:bg-green-400 hidden">Confirmar carona</button>
-                    <button id="btnAjuda" class="py-2 px-4 bg-red-500 text-[#111714] font-bold hover:bg-red-400 hidden">Ajuda</button>
                 </div>
 
                 <div id="resultado" class="rounded-xl p-4 text-white hidden">
@@ -224,6 +225,24 @@
         </div>
 
     <div id="footer"></div>
+
+    <!-- BOTÃO FLUTUANTE DO CHATBOT -->
+    <button id="chatFloatingButton">Ajuda</button>
+
+    <!-- ESTRUTURA DO CHATBOT -->
+    <div id="chatWindow">
+        <div id="chatHeader">
+            AcessRide - Ajuda
+            <span id="chatClose" class="close-chat">×</span>
+        </div>
+
+        <div id="chat-messages"></div>
+
+        <div id="chat-input">
+            <input id="user-input" type="text" placeholder="Digite sua mensagem..." />
+            <button id="send-btn">➤</button>
+        </div>
+    </div>
 
 </body>
 </html>

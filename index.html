@@ -1,26 +1,139 @@
+<!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <base href="/accessRide/">
-    
-    <!-- Tailwind -->
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AcessRide - Chatbot</title>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #ffffff;
+    }
 
-    <!-- CSS externo -->
-    <link rel="stylesheet" href="assets/css/main.css">
+    /* Botão flutuante */
+    #chat-button {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 65px;
+      height: 65px;
+      border-radius: 50%;
+      background: #3db36b;
+      border: 3px solid #1a1a1a;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 30px;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+      transition: 0.3s;
+    }
 
-    <!-- JS externo -->
-    <script src="assets/js/main.js" defer></script>
-  </head>
+    #chat-button:hover {
+      transform: scale(1.08);
+    }
 
-  <body class="bg-[#111714] font-[Spline_Sans]">
-    <div class="relative flex size-full min-h-screen flex-col dark group/design-root overflow-x-hidden">
-    <div id="header"></div>
+    /* Janela do chat */
+    #chat-container {
+      position: fixed;
+      bottom: 95px;
+      right: 20px;
+      width: 340px;
+      height: 450px;
+      background: #ffffff;
+      border-radius: 18px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+      overflow: hidden;
+      display: none;
+      flex-direction: column;
+      border: 2px solid #1a1a1a;
+    }
 
-      <main class="flex-grow">
-      <section class="relative min-h-[60vh] flex items-center justify-center text-white text-center px-4" id="home">
-        <div class="absolute inset-0 bg-cover bg-center"
-          style='background-image: linear-gradient(rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.8) 100%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuDBjArHwHL5qj32QLZZwQDagAEJgJvOlP8-nHeXw_KKy-Wvq7E-sg1t7UlPUoSEYql2uI8qw9gmACxZAAoAO4iTTkQuJBmNRd5CFk-5lfGLvChTmQGY9hjlXKi5Fe2DFd9h6ZCLEXRyRN6wORiF1FvYzyPhyeXIU1b5IKTnoBR3XoZQuNC1_LYQ8vnNiGlDMKEuDwjCBF3kkoErZyQkG1BpKfxVS1IzBKGWsOKiIacKAiCpFBB_7erjFtpKsuUtrSmDLsbS0uheXOi1");'>
-        </div>
+    #chat-header {
+      background: #3db36b;
+      padding: 14px;
+      color: white;
+      font-size: 18px;
+      font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #1a1a1a;
+    }
+
+    #chat-messages {
+      flex: 1;
+      padding: 12px;
+      overflow-y: auto;
+      background: #ffffff;
+    }
+
+    .message {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 14px;
+      max-width: 90%;
+    }
+
+    .bubble {
+      background: #e9e9e9;
+      padding: 10px 14px;
+      border-radius: 14px;
+      border: 1px solid #1a1a1a;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .user .bubble {
+      background: #3db36b;
+      color: #ffffff;
+      margin-left: auto;
+    }
+
+    .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 2px solid #1a1a1a;
+    }
+
+    #chat-input {
+      display: flex;
+      border-top: 2px solid #1a1a1a;
+    }
+
+    #user-input {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      outline: none;
+      font-size: 14px;
+    }
+
+    #send-btn {
+      background: #3db36b;
+      border: none;
+      color: white;
+      padding: 0 16px;
+      cursor: pointer;
+      font-size: 18px;
+      border-left: 2px solid #1a1a1a;
+    }
+  </style>
+</head>
+<body>
+
+<button id="chat-button">💬</button>
+
+<div id="chat-container">
+  <div id="chat-header">
+    AcessRide - Assistente
+    <span id="close-chat" style="cursor:pointer;font-size:22px;">×</span>
+  </div>
 
         <div class="relative z-10 max-w-3xl mx-auto">
           <h1 class="text-5xl md:text-7xl font-black tracking-tighter mb-4">
@@ -305,3 +418,4 @@
     </div>
   </body>
 </html>
+
