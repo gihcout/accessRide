@@ -16,7 +16,8 @@ let partidaCoords = null,
     animationElapsed = 0,        // tempo acumulado da animação (para progressos)
     routeTraveled = null,        // parte da rota já percorrida
     routeRemaining = null,       // parte da rota restante
-    corridaCancelada = false;    // indica se o usuário cancelou a corrida
+    corridaCancelada = false,    // indica se o usuário cancelou a corrida
+    formaPagamentoEscolhida = null; // forma que a corrida será paga pelo usuário
 
 // Ícone do carro
 const carIcon = L.divIcon({
@@ -96,10 +97,23 @@ function setButtonState(state) {
 }
 
 async function geocode(local) {
-  const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(local)}`);
+  const numero = extrairNumero(local);
+  let query = local;
+  if (numero && !local.includes(` ${numero},`) && !local.match(/,\s*${numero}\b/)) {
+    query = `${local.replace(/\s+/g, ' ')} ${numero}`;
+  }
+
+  const res = await fetch(
+    `https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&q=${encodeURIComponent(query)}`
+  );
   const data = await res.json();
-  if (!data.length) throw new Error("Local não encontrado");
-  return [parseFloat(data[0].lat), parseFloat(data[0].lon)];
+  if (!data.length)
+    throw new Error("Local não encontrado");
+  const item = data[0];
+  if (!isInSaoPaulo(item.address)) {
+    throw new Error("Endereço fora de São Paulo");
+  }
+  return [parseFloat(item.lat), parseFloat(item.lon)];
 }
 
 function escolherModelo() {
@@ -159,8 +173,12 @@ btnTracar.addEventListener('click', async () => {
     [partidaCoords, destinoCoords] = await Promise.all([geocode(partidaTxt), geocode(destinoTxt)]);
   } catch (err) {
     console.error(err);
-    return showAlert("Não foi possível localizar os endereços");
+    if (err.message.includes("São Paulo"))
+      return showAlert("Este serviço está disponível apenas para o estado de São Paulo.");
+    
+    return showAlert("Não foi possível localizar os endereços.");
   }
+
 
   control = L.Routing.control({
     waypoints: [L.latLng(...partidaCoords), L.latLng(...destinoCoords)],
@@ -206,6 +224,15 @@ btnConfirm.addEventListener('click', () => {
     return showAlert("Por favor, selecione seus equipamentos antes de confirmar.");
   if (!tipo)
     return showAlert("Escolha o tipo de solicitação antes de confirmar.");
+
+  const pagamentoSelecionado = document.querySelector('input[name="formaPagamento"]:checked');
+  if (!pagamentoSelecionado) {
+      el("erroPagamento").classList.remove("hidden");
+      return;
+  }
+
+  el("erroPagamento").classList.add("hidden");
+  formaPagamentoEscolhida = pagamentoSelecionado.value;
 
   // ====== [1] Fluxo de agendamento: data e hora ======
   if (tipo === 'agendar') {
@@ -514,12 +541,31 @@ function finalizarCorrida() {
   modalEncontrado.classList.add('hidden');
   modalProcurando.innerHTML = `
     <h3 class="text-2xl font-bold text-[#38e07b] mb-2">Viagem concluída!</h3>
+
     <p class="text-[#9eb7a8] mb-3">Obrigado por usar AccessRide.</p>
+
+    <p class="text-white font-semibold mb-1">
+        Forma de pagamento:
+    </p>
+
+    <p class="text-[#38e07b] font-bold mb-4">
+        ${formaPagamentoEscolhida}
+    </p>
+
+    <p class="text-[#9eb7a8] mb-4">
+        Por favor, realize o pagamento diretamente ao motorista.
+    </p>
+
     <p class="text-[#9eb7a8] mb-3">Avalie sua experiência:</p>
+
     <div id="avaliacao" class="flex justify-center gap-2 mb-3">
-      ${[1,2,3,4,5].map(n => `<span class="estrela cursor-pointer text-2xl transition-transform hover:scale-125">⭐</span>`).join('')}
+        ${[1,2,3,4,5].map(n => `<span class="estrela cursor-pointer text-2xl transition-transform hover:scale-125">⭐</span>`).join('')}
     </div>
-    <button id="btnEnviarAvaliacao" class="mt-3 py-2 px-4 bg-[#38e07b] text-[#111714] font-bold rounded-lg hover:bg-green-400">Enviar Avaliação</button>
+
+    <button id="btnEnviarAvaliacao"
+            class="mt-3 py-2 px-4 bg-[#38e07b] text-[#111714] font-bold rounded-lg hover:bg-green-400">
+        Enviar Avaliação
+    </button>
   `;
   modalProcurando.classList.remove('hidden');
   ensureCloseButton();
@@ -556,7 +602,7 @@ function configurarAvaliacao() {
         <h3 class="text-2xl font-bold text-[#ff4d4d] mb-2">Sentimos muito pela sua experiência 😔</h3>
         <p class="text-[#ff9999] mb-3">Você deu ${avaliacao} ${avaliacao === 1 ? 'estrela' : 'estrelas'}.</p>
         <p class="text-[#ff9999]">Entre em contato com nosso suporte para que possamos melhorar:<br>
-        <a href="mailto:suporte@accessride.com.br" class="underline text-[#ff4d4d]">suporte@accessride.com.br</a></p>
+        <a href="mailto:accessride.contato@gmail.com" class="underline text-[#ff4d4d]">accessride.contato@gmail.com</a></p>
       `;
     }
     ensureCloseButton();
@@ -574,6 +620,11 @@ setButtonState('preRota');
 window.addEventListener('load', () => setTimeout(() => map.invalidateSize(), 300));
 
 // ---------- Autocomplete de endereços ----------
+function extrairNumero(texto) {
+  const match = texto.match(/\b(\d{1,5})\b/);
+  return match ? match[1] : null;
+}
+
 function setupAutocomplete(inputId) {
   const input = document.getElementById(inputId);
   const list = document.createElement('div');
@@ -634,7 +685,17 @@ function setupAutocomplete(inputId) {
             opt.style.color = '#f2f2f2';
           });
           opt.addEventListener('click', () => {
-            input.value = shortAddress || item.display_name;
+            const numero = extrairNumero(input.value); // mantém número se existir
+            let texto = shortAddress || item.display_name;
+
+            if (numero) {
+              texto = texto.replace(/,\s*\d{1,5}(?![-\d])/g, "");
+              texto = texto.includes(',')
+                ? texto.replace(',', `, ${numero},`)
+                : `${texto}, ${numero}`;
+            }
+
+            input.value = texto;
             list.style.display = 'none';
           });
           list.appendChild(opt);
@@ -655,5 +716,41 @@ function setupAutocomplete(inputId) {
   });
 }
 
+function resetViagem() {
+  corridaCancelada = true;
+  if (animationInterval) clearInterval(animationInterval);
+  animationInterval = null;
+
+  if (motoristaMarker) {
+    map.removeLayer(motoristaMarker);
+    motoristaMarker = null;
+  }
+
+  if (routePolyline) map.removeLayer(routePolyline);
+  if (routeTraveled) map.removeLayer(routeTraveled);
+  if (routeRemaining) map.removeLayer(routeRemaining);
+
+  removerControle(control);
+  removerControle(driverRouter);
+  control = null;
+  driverRouter = null;
+  el("resultado").classList.add("hidden");
+  toggleCamposViagem(false);
+  setButtonState("preRota");
+}
+
+["partida", "destino"].forEach(id => {
+  el(id).addEventListener("input", () => {
+    resetViagem();
+  });
+});
+
 setupAutocomplete('partida');
 setupAutocomplete('destino');
+
+function isInSaoPaulo(address) {
+  if (!address) return false;
+
+  const state = address.state || address.state_district || "";
+  return state.toLowerCase().includes("são paulo") || state.toLowerCase().includes("sao paulo");
+}
