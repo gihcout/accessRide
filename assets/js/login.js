@@ -62,7 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         alert(`Login realizado como ${type}!`);
-        window.location.href = "./index.html";
+        window.location.href = "../index.html";
     });
 
 });
