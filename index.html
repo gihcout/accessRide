@@ -77,26 +77,27 @@
                 class="form-select w-full rounded-xl text-white bg-[#29382f] border-none focus:ring-[#38e07b] h-14 p-4 text-base">
                 <option selected="">
                   Selecione as necessidades</option>
-                <option>Suporte para Deficiência Visual</option>
-                <option>Suporte para Deficiência Auditiva</option>
-                <option>Animal de serviço</option>
+                <option>Paralisia completa de membros inferiores (paraplegia)</option>
+                <option>Paralisia parcial de membros inferiores</option>
+                <option>Paralisia de membros superiores e inferiores (tetraplegia)</option>
+                <option>Dificuldade motora leve a moderada</option>
+                <option>Outras condições de mobilidade</option>
               </select>
 
               <select
                 class="form-select w-full rounded-xl text-white bg-[#29382f] border-none focus:ring-[#38e07b] h-14 p-4 text-base">
                 <option selected="">Selecione o equipamento</option>
-                <option>Cadeira de rodas dobrável</option>
-                <option>Cadeira de rodas elétrica</option>
-                <option>
-                  Caminhante</option>
+                <option>Nenhum</option>
+                <option>Cadeira de rodas padrão</option>
+                <option>Cadeira de rodas motorizada</option>
+                <option>Cadeira de rodas esportiva</option>
+                <option>Andador</option>
+                <option>Bengala</option>
+                <option>Muletas</option>
+                <option>Órtese para membros inferiores</option>
+                <option>Próteses para membros inferiores</option>
+                <option>Outros equipamentos</option>
               </select>
-
-              <input
-                class="form-input w-full rounded-xl text-white bg-[#29382f] border-none focus:ring-[#38e07b] h-14 placeholder:text-[#9eb7a8] p-4 text-base"
-                placeholder="Local de Partida" />
-              <input
-                class="form-input w-full rounded-xl text-white bg-[#29382f] border-none focus:ring-[#38e07b] h-14 placeholder:text-[#9eb7a8] p-4 text-base"
-                placeholder="Local de Chegada" />
             </div>
 
             <button
@@ -152,14 +153,13 @@
               <h3 class="text-xl font-bold text-white">Treinados &amp;
                 Drivers verificados</h3>
               <p class="text-[#9eb7a8] text-sm">Todos os motoristas passam por rigorosas verificações de antecedentes e
-                treinamento especializado em acessibilidade.</p>
+                treinamentos especializados em acessibilidade.</p>
             </div>
 
             <div class="flex flex-col items-center gap-4 text-center rounded-lg bg-[#1c2620] p-6">
               <span class="material-symbols-outlined text-4xl text-[#38e07b]">groups</span>
               <h3 class="text-xl font-bold text-white">Apoio Comunitário</h3>
-              <p class="text-[#9eb7a8] text-sm">Nós promovemos uma comunidade solidária e inclusiva para passageiros e
-                motoristas.</p>
+              <p class="text-[#9eb7a8] text-sm">Nós promovemos uma comunidade solidária e inclusiva para os passageiros.</p>
             </div>
 
             <div class="flex flex-col items-center gap-4 text-center rounded-lg bg-[#1c2620] p-6">
@@ -179,13 +179,12 @@
             <h2 class="text-3xl font-bold text-white mb-2">
               Torne-se um motorista AccessRide</h2>
             <p class="text-[#9eb7a8] max-w-lg">Junte-se à nossa equipe de motoristas dedicados e faça a diferença na sua
-              comunidade. Oferecemos horários flexíveis, salários competitivos e a oportunidade de prestar um serviço
-              essencial.</p>
+              comunidade. Oferecemos a oportunidade de prestar um serviço essencial.</p>
           </div>
 
           <button
             class="flex-shrink-0 min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-12 px-6 bg-[#38e07b] text-[#111714] text-base font-bold leading-normal tracking-[0.015em] hover:bg-green-400 transition-colors">
-            <span class="truncate">Inscreva-se agora</span>
+            <a href="./pages/cadastro.html" class="truncate">Inscreva-se agora</a>
           </button>
         </section>
 
@@ -277,25 +276,6 @@
           </div>
         </section>
 
-        <section class="max-w-3xl mx-auto text-center mb-16 sm:mb-24" id="about">
-          <h2 class="text-3xl font-bold text-white mb-4">Baixe o aplicativo AccessRide</h2>
-          <p class="text-[#9eb7a8] mb-8">Comece a usar o AccessRide hoje mesmo. O futuro do transporte acessível está ao
-            seu alcance.</p>
-          <div class="flex justify-center gap-4 flex-wrap">
-            <button
-              class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-12 px-6 bg-[#29382f] text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-gray-700 transition-colors">
-              <span class="truncate">
-                Baixe na App Store</span>
-            </button>
-
-            <button
-              class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-12 px-6 bg-[#29382f] text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-gray-700 transition-colors">
-              <span class="truncate">
-                Disponível no Google Play</span>
-            </button>
-          </div>
-        </section>
-
         <section class="max-w-3xl mx-auto">
           <h2 class="text-3xl font-bold text-white mb-8 text-center">
             Perguntas frequentes</h2>
@@ -305,9 +285,11 @@
                 estão disponíveis? <span
                   class="material-symbols-outlined transition-transform group-open:rotate-180">expand_more</span>
               </summary>
-              <p class="text-[#9eb7a8] mt-2">A AccessRide oferece uma variedade de veículos acessíveis, incluindo vans
-                com acesso para cadeira de rodas, sedãs com espaço para as pernas e minivans com assentos dobráveis.
-                Você pode especificar suas necessidades e equipamentos ao solicitar uma viagem.</p>
+              <p class="text-[#9eb7a8] mt-2">Por meio da AccessRide, você tem acesso a uma rede de 
+                motoristas parceiros que oferecem veículos acessíveis, como vans com acesso para 
+                cadeira de rodas, sedãs com espaço para as pernas e minivans com assentos dobráveis. 
+                É possível especificar suas necessidades e equipamentos ao solicitar a viagem, 
+                garantindo mais conforto e segurança.</p>
             </details>
 
             <details class="group bg-[#29382f] rounded-xl p-4 cursor-pointer">
@@ -315,9 +297,9 @@
                 Como posso solicitar uma viagem acessível? <span
                   class="material-symbols-outlined transition-transform group-open:rotate-180">expand_more</span>
               </summary>
-              <p class="text-[#9eb7a8] mt-2">Basta abrir o aplicativo AccessRide, inserir seu destino e selecionar as
-                opções de acessibilidade desejadas no menu "Personalizar Viagem" antes de confirmar sua solicitação. O
-                aplicativo conectará você automaticamente a um motorista e veículo adequados.</p>
+              <p class="text-[#9eb7a8] mt-2">Basta abrir o site AccessRide, inserir seu destino e selecionar as
+                opções de acessibilidade desejadas no menu antes de confirmar sua solicitação. O
+                site conectará você automaticamente a um motorista e veículo adequados.</p>
             </details>
 
             <details class="group bg-[#29382f] rounded-xl p-4 cursor-pointer">
@@ -326,8 +308,7 @@
                   class="material-symbols-outlined transition-transform group-open:rotate-180">expand_more</span>
               </summary>
               <p class="text-[#9eb7a8] mt-2">A segurança é nossa principal prioridade. Todos os motoristas passam por
-                verificações de antecedentes rigorosas, recebem treinamento contínuo e todas as viagens são rastreadas
-                por GPS. Também temos uma equipe de suporte 24 horas por dia, 7 dias por semana, pronta para ajudar você
+                verificações de antecedentes rigorosas e sobre os treinamentos concluídos. Também temos uma equipe de suporte 24 horas por dia, 7 dias por semana, pronta para ajudar você
                 a qualquer momento.</p>
             </details>
           </div>
