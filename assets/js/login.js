@@ -62,6 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         localStorage.setItem("accessride_logged", "true");
-        window.location.href = "../accessRide/index.html";
+        window.location.href = "/accessRide/";
+
     });
 });
