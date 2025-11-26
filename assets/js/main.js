@@ -44,11 +44,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const btnViajarDesktop = document.getElementById("btnViajarDesktop");
         const btnLoginDesktop = document.getElementById("btnLoginDesktop");
         const greetDesktop = document.getElementById("userGreetingDesktop");
+        const btnLogoutDesktop = document.getElementById("btnLogoutDesktop");
 
         // Mobile
         const btnViajarMobile = document.getElementById("btnViajarMobile");
         const btnLoginMobile = document.getElementById("btnLoginMobile");
         const greetMobile = document.getElementById("userGreetingMobile");
+        const btnLogoutMobile = document.getElementById("btnLogoutMobile");
 
         if (isLogged) {
             btnViajarDesktop?.classList.remove("opacity-40", "pointer-events-none");
@@ -57,13 +59,15 @@ document.addEventListener('DOMContentLoaded', () => {
             btnLoginDesktop?.classList.add("hidden");
             btnLoginMobile?.classList.add("hidden");
 
-            if (user.name) {
-                greetDesktop.textContent = `Olá, ${user.name}`;
-                greetDesktop.classList.remove("hidden");
+            greetDesktop.textContent = `Olá, ${user.name}`;
+            greetDesktop.classList.remove("hidden");
 
-                greetMobile.textContent = `Olá, ${user.name}`;
-                greetMobile.classList.remove("hidden");
-            }
+            greetMobile.textContent = `Olá, ${user.name}`;
+            greetMobile.classList.remove("hidden");
+
+            btnLogoutDesktop?.classList.remove("hidden");
+            btnLogoutMobile?.classList.remove("hidden");
+
         } else {
             btnViajarDesktop?.classList.add("opacity-40", "pointer-events-none");
             btnViajarMobile?.classList.add("opacity-40", "pointer-events-none");
@@ -73,7 +77,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
             greetDesktop?.classList.add("hidden");
             greetMobile?.classList.add("hidden");
+
+            btnLogoutDesktop?.classList.add("hidden");
+            btnLogoutMobile?.classList.add("hidden");
         }
+
+        btnLogoutDesktop?.addEventListener("click", logoutUser);
+        btnLogoutMobile?.addEventListener("click", logoutUser);
+    }
+
+    function logoutUser() {
+        localStorage.removeItem("accessride_logged");
+        window.location.reload();
     }
 
     fetch(path)
