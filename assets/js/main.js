@@ -67,3 +67,18 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .catch(err => console.error('Erro ao carregar templates:', err));
 });
+
+// Controle do botão "Solicite uma carona"
+setTimeout(() => {
+    const isLogged = localStorage.getItem("accessride_logged") === "true";
+    const btnDesktop = document.querySelector('a[href="pages/viajar.html"]');
+    const btnMobile = document.querySelector('#menuMobile a[href="pages/viajar.html"]');
+
+    if (!isLogged) {
+        btnDesktop?.classList.add("opacity-40", "pointer-events-none");
+        btnMobile?.classList.add("opacity-40", "pointer-events-none");
+    } else {
+        btnDesktop?.classList.remove("opacity-40", "pointer-events-none");
+        btnMobile?.classList.remove("opacity-40", "pointer-events-none");
+    }
+}, 300);
