@@ -24,7 +24,11 @@ document.addEventListener("DOMContentLoaded", () => {
         errorMsg.textContent = "";
 
         const type = loginTypeSelect.value;
-        const password = document.getElementById("password").value.trim();
+        const passwordInput = type === "cliente"
+            ? document.getElementById("cliente-password")
+            : document.getElementById("motorista-password");
+
+        const password = passwordInput.value.trim();
         let userData = JSON.parse(localStorage.getItem("accessride_user")) || null;
 
         if (!userData) {
@@ -46,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 errorMsg.classList.remove("hidden");
                 return;
             }
-        } else if (type === "motorista") {
+        } else {
             const cnh = document.getElementById("cnh").value.trim();
             if (cnh !== userData.cnh || password !== userData.password) {
                 errorMsg.textContent = "CNH ou senha incorretos.";
@@ -63,6 +67,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         localStorage.setItem("accessride_logged", "true");
         window.location.href = "/accessRide/";
-
     });
+
 });

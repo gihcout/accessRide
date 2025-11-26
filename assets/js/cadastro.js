@@ -60,17 +60,16 @@ document.addEventListener("DOMContentLoaded", () => {
                 alert("Para cadastrar como motorista, é necessário informar a CNH.");
                 return;
             }
-
-            const password = document.getElementById("password")?.value.trim() || "";
-
+            const passwordInput = document.getElementById("motorista-password");
+            const password = passwordInput?.value.trim() || "";
             if (!password) {
                 alert("Informe a senha.");
                 return;
             }
-
             user.password = password;
         } else {
-            const password = document.getElementById("password")?.value.trim() || "";
+            const passwordInput = document.getElementById("cliente-password");
+            const password = passwordInput?.value.trim() || "";
             if (!password) {
                 alert("Informe a senha.");
                 return;
