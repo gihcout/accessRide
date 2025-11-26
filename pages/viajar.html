@@ -6,9 +6,19 @@
 
         <!-- CSS externo -->
         <link rel="stylesheet" href="../assets/css/main.css">
+        <link rel="stylesheet" href="../assets/css/maps.css">
+        <link rel="stylesheet" href="../assets/css/chat.css">
 
         <!-- JS externo -->
         <script src="../assets/js/main.js" defer></script>
+        <script src="../assets/js/corrida.js" defer></script>
+        <script src="../assets/js/chatbot.js" defer></script>
+
+        <!-- Leaflet -->
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+        <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+        <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
     </head>
 
 <body class="bg-[#111714] min-h-screen" style='font-family: "Spline Sans", "Noto Sans", sans-serif;'>
@@ -25,9 +35,6 @@
                         </div>
                         <h3 class="text-xl font-bold text-white mb-2">SUV Acessível</h3>
                         <p class="text-[#9eb7a8] mb-4">Veículo com rampa ou elevador para cadeiras de rodas, espaço amplo e motorista treinado.</p>
-                        <button onclick="window.location.href='./corrida.html'" class="mt-auto w-full py-2 px-4 bg-[#38e07b] text-[#111714] font-bold rounded-lg hover:bg-green-400 transition-colors">
-                            Solicitar
-                        </button>
                     </div>
 
                     <div class="bg-[#1c2620] rounded-xl p-6 flex flex-col">
@@ -36,9 +43,6 @@
                         </div>
                         <h3 class="text-xl font-bold text-white mb-2">Sedan Acessível</h3>
                         <p class="text-[#9eb7a8] mb-4">Portas mais largas e espaço extra para as pernas, ideal para quem precisa de mais conforto.</p>
-                        <button onclick="window.location.href='./corrida.html'" class="mt-auto w-full py-2 px-4 bg-[#38e07b] text-[#111714] font-bold rounded-lg hover:bg-green-400 transition-colors">
-                            Solicitar
-                        </button>
                     </div>
 
                     <div class="bg-[#1c2620] rounded-xl p-6 flex flex-col">
@@ -47,9 +51,6 @@
                         </div>
                         <h3 class="text-xl font-bold text-white mb-2">Minivan Flexível</h3>
                         <p class="text-[#9eb7a8] mb-4">Assentos removíveis ou dobráveis para acomodar equipamentos de mobilidade ou grupos.</p>
-                        <button onclick="window.location.href='./corrida.html'" class="mt-auto w-full py-2 px-4 bg-[#38e07b] text-[#111714] font-bold rounded-lg hover:bg-green-400 transition-colors">
-                            Solicitar
-                        </button>
                     </div>
                 </div>
             </section>
@@ -90,8 +91,158 @@
                 </div>
             </section>
 
+            <br>
+            
+            <section class="bg-[#1c2620] rounded-xl p-8 mb-16">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                    <label class="block text-white mb-2">Necessidades especiais</label>
+                    <select id="need" class="w-full bg-[#29382f] text-white rounded-lg p-3">
+                        <option>Selecione sua condição</option>
+                        <option>Paralisia completa de membros inferiores (paraplegia)</option>
+                        <option>Paralisia parcial de membros inferiores</option>
+                        <option>Paralisia de membros superiores e inferiores (tetraplegia)</option>
+                        <option>Dificuldade motora leve a moderada</option>
+                        <option>Outras condições de mobilidade</option>
+                    </select>
+                    </div>
+                    <div>
+                    <label class="block text-white mb-2">Equipamentos</label>
+                    <select id="equip" class="w-full bg-[#29382f] text-white rounded-lg p-3">
+                        <option>Selecione seus equipamentos</option>
+                        <option>Nenhum</option>
+                        <option>Cadeira de rodas padrão</option>
+                        <option>Cadeira de rodas motorizada</option>
+                        <option>Cadeira de rodas esportiva</option>
+                        <option>Andador</option>
+                        <option>Bengala</option>
+                        <option>Muletas</option>
+                        <option>Órtese para membros inferiores</option>
+                        <option>Próteses para membros inferiores</option>
+                        <option>Outros equipamentos</option>
+                    </select>
+                    </div>
+                    <div>
+                    <label class="block text-white mb-2">Local de partida</label>
+                    <input id="partida" type="text" class="w-full bg-[#29382f] text-white rounded-lg p-3" placeholder="Digite o endereço">
+                    </div>
+                    <div>
+                    <label class="block text-white mb-2">Destino</label>
+                    <input id="destino" type="text" class="w-full bg-[#29382f] text-white rounded-lg p-3" placeholder="Digite o endereço">
+                    </div>
+                </div>
+
+                <div class="mt-6">
+                    <label class="block text-white mb-2">Categorias</label>
+                    <select id="tipoSolicitacao" class="w-full bg-[#29382f] text-white rounded-lg p-3">
+                    <option value="">Selecione</option>
+                    <option value="flexivel">Flexível</option>
+                    <option value="agendar">Agendar</option>
+                    </select>
+                </div>
+
+                <div id="agendamentoContainer" class="mt-6 hidden">
+                <label class="block text-white mb-2">Data e hora da partida</label>
+                <input id="dataHoraAgendada" type="datetime-local"
+                        class="w-full bg-[#29382f] text-white rounded-lg p-3">
+                </div>
+
+                <div id="pagamentoContainer" class="mt-6">
+                    <label class="block text-white mb-2">Forma de pagamento</label>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <label class="flex items-center bg-[#29382f] text-white rounded-lg p-3 cursor-pointer hover:bg-[#325041] transition">
+                            <input type="radio" name="formaPagamento" value="PIX" class="hidden peer" />
+                            <span class="w-5 h-5 border-2 border-green-400 rounded-full flex items-center justify-center mr-3 peer-checked:bg-[#38e07b] peer-checked:border-[#38e07b] transition"></span>
+                            <span class="text-sm font-medium">PIX</span>
+                        </label>
+                        <label class="flex items-center bg-[#29382f] text-white rounded-lg p-3 cursor-pointer hover:bg-[#325041] transition">
+                            <input type="radio" name="formaPagamento" value="Dinheiro" class="hidden peer" />
+                            <span class="w-5 h-5 border-2 border-green-400 rounded-full flex items-center justify-center mr-3 peer-checked:bg-[#38e07b] peer-checked:border-[#38e07b] transition"></span>
+                            <span class="text-sm font-medium">Dinheiro</span>
+                        </label>
+                    </div>
+                    <p id="erroPagamento" class="hidden text-red-400 text-sm mt-2">
+                        Selecione uma forma de pagamento.
+                    </p>
+                </div>
+
+                <div class="mt-6 flex gap-3 items-start">
+                    <button id="btnTracar" class="py-2 px-4 bg-[#38e07b] text-[#111714] font-bold rounded-lg hover:bg-green-400">Consultar preço</button>
+                    <button id="btnConfirm" class="py-2 px-4 bg-[#38e07b] text-[#111714] font-bold rounded-lg hover:bg-green-400 hidden">Confirmar carona</button>
+                </div>
+
+                <div id="resultado" class="rounded-xl p-4 text-white hidden">
+                    <p id="distancia" class="text-[#9eb7a8]"></p>
+                    <p id="valor" class="text-[#38e07b] text-xl font-bold"></p>
+                </div>
+
+                <div id="map" class="mt-6"></div>
+            </section>
+
         </main>
 
+        <div id="modal" class="modal-overlay modal-hidden">
+            <div class="relative bg-[#1c2620] text-white rounded-xl p-6 w-80 text-center animate-fadeIn">
+            <button id="closeModal"
+                class="absolute top-2 right-2 text-[#9eb7a8] hover:text-white text-xl font-bold focus:outline-none z-20">
+                ×
+            </button>
+
+            <div id="modalProcurando">
+                <h3 class="text-xl font-bold mb-2">Procurando motorista...</h3>
+                <div class="spinner"></div>
+                <p id="modalTextoBusca" class="text-[#9eb7a8]">Estamos localizando um motorista próximo.</p>
+            </div>
+
+            <div id="modalEncontrado" class="hidden">
+                <h3 class="text-2xl font-bold text-[#38e07b] mb-2">Motorista encontrado!</h3>
+                <p id="infoMotorista" class="text-[#9eb7a8] mb-3">Carlos S. — Van Acessível — 4.9 ★</p>
+                <div class="progress-bar mb-3">
+                <div id="progressFill" class="progress-bar-fill"></div>
+                </div>
+                <p id="tempoRestante" class="text-[#9eb7a8] text-sm mb-2"></p>
+                <div class="flex justify-center gap-3">
+                <button id="cancelModal" class="py-2 px-3 bg-[#ff5c5c] text-white font-bold rounded-lg">Cancelar</button>
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <div id="alertModal" class="fixed inset-0 bg-black/60 flex items-center justify-center hidden z-[9999]">
+            <div class="relative bg-[#1f2a23] text-white rounded-xl shadow-lg p-6 w-[90%] max-w-sm text-center animate-fadeIn">
+                <button id="closeAlert"
+                class="absolute top-2 right-3 text-[#9eb7a8] hover:text-white text-xl font-bold focus:outline-none z-20">
+                ×
+                </button>
+
+                <p id="alertMessage" class="mb-4 text-base font-medium mt-2"></p>
+
+                <button id="alertOk"
+                class="bg-[#38e07b] hover:bg-[#2fc16b] text-[#111714] font-semibold py-2 px-6 rounded-lg transition">
+                OK
+                </button>
+            </div>
+        </div>
+
     <div id="footer"></div>
+
+    <!-- BOTÃO FLUTUANTE DO CHATBOT -->
+    <button id="chatFloatingButton">Ajuda</button>
+
+    <!-- ESTRUTURA DO CHATBOT -->
+    <div id="chatWindow">
+        <div id="chatHeader">
+            AcessRide - Ajuda
+            <span id="chatClose" class="close-chat">×</span>
+        </div>
+
+        <div id="chat-messages"></div>
+
+        <div id="chat-input">
+            <input id="user-input" type="text" placeholder="Digite sua mensagem..." />
+            <button id="send-btn">➤</button>
+        </div>
+    </div>
+
 </body>
 </html>

@@ -1,0 +1,136 @@
+/* ---------------- CHATBOT ---------------- */
+
+#chatWindow {
+  position: fixed;
+  bottom: 90px;
+  right: 20px;
+  width: 330px;
+  max-height: 480px;
+  background: #ffffff;
+  border-radius: 18px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+  font-family: "Poppins", sans-serif;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 2px solid #38e07b;
+  z-index: 3000;
+
+  /* animação de entrada */
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.35s ease;
+  pointer-events: none;
+}
+
+#chatWindow.open {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+#chatHeader {
+  background: #38e07b;
+  padding: 12px;
+  color: white;
+  text-align: center;
+  font-weight: 600;
+  font-size: 15px;
+  position: relative;
+}
+
+#chatClose {
+  position: absolute;
+  right: 10px;
+  top: 6px;
+  cursor: pointer;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+/* mensagens */
+#chat-messages {
+  flex: 1;
+  padding: 12px;
+  overflow-y: auto;
+  background-color: #f6f8ff;
+}
+
+.message {
+  padding: 10px 14px;
+  margin-bottom: 10px;
+  border-radius: 14px;
+  max-width: 80%;
+  line-height: 1.4;
+  font-size: 14px;
+}
+
+.bot {
+  background: #e3e9ff;
+  color: #1f2a5c;
+  align-self: flex-start;
+}
+
+.user {
+  background: #38e07b;
+  color: white;
+  align-self: flex-end;
+}
+
+/* campo de input */
+#chat-input {
+  display: flex;
+  border-top: 1px solid #dcdcdc;
+  padding: 8px;
+  background: white;
+}
+
+#user-input {
+  flex: 1;
+  border: none;
+  padding: 10px;
+  border-radius: 10px;
+  outline: none;
+  background: #f3f4fa;
+  font-size: 14px;
+}
+
+#send-btn {
+  width: 45px;
+  margin-left: 8px;
+  background: #38e07b;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+#send-btn:hover {
+  background: #165a31;
+}
+
+/* ---------------- BOTÃO FLUTUANTE ---------------- */
+
+#chatFloatingButton {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  background: #38e07b;
+  color: #111714;
+  border: none;
+  padding: 16px 20px;
+  border-radius: 50px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 3500;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  transition: 0.25s ease;
+}
+
+#chatFloatingButton:hover {
+  background: #2fc16b;
+  transform: scale(1.05);
+}
