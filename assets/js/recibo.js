@@ -9,7 +9,6 @@ document.addEventListener("DOMContentLoaded", () => {
       doc.setFontSize(18);
       doc.setFont("helvetica", "bold");
       doc.text("Recibo - Simulação (Não tem valor fiscal)", 105, 20, { align: "center" });
-
       doc.setFontSize(10);
       doc.setFont("helvetica", "normal");
       doc.setTextColor(255, 0, 0);
@@ -38,12 +37,9 @@ document.addEventListener("DOMContentLoaded", () => {
       doc.setFontSize(10);
       doc.setTextColor(100);
       doc.text(dataHora, 60, startY + dados.length * lineHeight + 4);
-
       doc.setFontSize(10);
       doc.setTextColor(100);
       doc.text("Recibo gerado pelo sistema AccessRide de simulação, nenhum dado aqui apresentado é real.", 105, 280, { align: "center" });
-
-      // Baixar PDF
       doc.save("recibo_simulado_accessride.pdf");
     });
   }
