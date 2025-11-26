@@ -1,60 +1,69 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const isGithubPages = window.location.hostname.includes('github.io');
-  const repoName = 'accessRide';
-  const basePath = isGithubPages ? `/${repoName}/` : '/';
+    const isGithubPages = window.location.hostname.includes('github.io');
+    const repoName = 'accessRide';
+    const basePath = isGithubPages ? `/${repoName}/` : '/';
+    const path = `${basePath}components/templates.html`;
 
-  const path = window.location.pathname.includes('/pages/')
-    ? `${basePath}components/templates.html`
-    : `${basePath}components/templates.html`;
-
-  fetch(path)
-    .then(res => {
-      if (!res.ok) throw new Error(`Erro ${res.status} ao carregar ${path}`);
-      return res.text();
-    })
-    .then(html => {
-      const temp = document.createElement('div');
-      temp.innerHTML = html;
-
-      function injectTemplate(templateId, targetSelector) {
-        const tpl = temp.querySelector(`#${templateId}`);
+    function injectTemplate(templateId, targetSelector, tempDiv) {
+        const tpl = tempDiv.querySelector(`#${templateId}`);
         const target = document.querySelector(targetSelector);
         if (tpl && target) {
-          target.appendChild(tpl.content.cloneNode(true));
+            target.appendChild(tpl.content.cloneNode(true));
         }
-      }
+    }
 
-      injectTemplate('tpl-head', 'head');
-      injectTemplate('tpl-header', '#header');
-      injectTemplate('tpl-footer', '#footer');
+    function initMobileMenu() {
+        const menuBtn = document.getElementById("menuMobileBtn");
+        const menu = document.getElementById("menuMobile");
+        const closeBtn = document.getElementById("closeMenu");
 
-      document.querySelectorAll('#header a, #footer a').forEach(link => {
-        const href = link.getAttribute('href');
-        if (href && !href.startsWith('http')) {
-          const normalized = href.replace(/^(\.?\/)+/, ''); 
-          link.setAttribute('href', basePath + normalized);
-        }
-      });
+        if (!menuBtn || !menu || !closeBtn) return;
+        menuBtn.onclick = (e) => {
+            e.stopPropagation();
+            menu.style.transform = "translateX(0)";
+        };
 
-      document.querySelectorAll('img').forEach(img => {
-        const src = img.getAttribute('src');
-        if (src && !src.startsWith('http')) {
-          const normalized = src.replace(/^(\.?\/)+/, '');
-          img.setAttribute('src', basePath + normalized);
-        }
-      });
-    })
-    .catch(err => console.error('Erro ao carregar templates:', err));
+        closeBtn.onclick = (e) => {
+            e.stopPropagation();
+            menu.style.transform = "translateX(100%)";
+        };
 
-    document.addEventListener("click", () => {
-      const btn = document.getElementById("menuMobileBtn");
-      const menu = document.getElementById("menuMobile");
-      const closeBtn = document.getElementById("closeMenu");
+        document.addEventListener("click", (e) => {
+            if (!menu.contains(e.target) && e.target !== menuBtn) {
+                menu.style.transform = "translateX(100%)";
+            }
+        });
+    }
 
-      if (!btn || !menu || !closeBtn) return;
+    fetch(path)
+        .then(res => {
+            if (!res.ok) throw new Error(`Erro ${res.status} ao carregar ${path}`);
+            return res.text();
+        })
+        .then(html => {
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = html;
 
-      btn.onclick = () => menu.style.transform = "translateX(0)";
-      closeBtn.onclick = () => menu.style.transform = "translateX(100%)";
-  });
+            injectTemplate('tpl-head', 'head', tempDiv);
+            injectTemplate('tpl-header', '#header', tempDiv);
+            injectTemplate('tpl-footer', '#footer', tempDiv);
 
+            document.querySelectorAll('#header a, #footer a').forEach(link => {
+                const href = link.getAttribute('href');
+                if (href && !href.startsWith('http')) {
+                    const normalized = href.replace(/^(\.?\/)+/, '');
+                    link.setAttribute('href', basePath + normalized);
+                }
+            });
+
+            document.querySelectorAll('img').forEach(img => {
+                const src = img.getAttribute('src');
+                if (src && !src.startsWith('http')) {
+                    const normalized = src.replace(/^(\.?\/)+/, '');
+                    img.setAttribute('src', basePath + normalized);
+                }
+            });
+            initMobileMenu();
+        })
+        .catch(err => console.error('Erro ao carregar templates:', err));
 });
