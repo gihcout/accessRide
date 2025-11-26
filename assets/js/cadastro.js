@@ -5,6 +5,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const motoristaFields = document.getElementById("motorista-fields");
     const driverDocs = document.getElementById("driver-docs");
     const form = document.querySelector("form");
+    const modal = document.getElementById("success-modal");
+    const closeModal = document.getElementById("close-modal");
 
     function updateFormVisibility() {
         if (userTypeSelect.value === "motorista") {
@@ -37,9 +39,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    const modal = document.getElementById("success-modal");
-    const closeModal = document.getElementById("close-modal");
-
     form.addEventListener("submit", (e) => {
         e.preventDefault();
 
@@ -52,16 +51,40 @@ document.addEventListener("DOMContentLoaded", () => {
             lastName: document.getElementById("last-name")?.value.trim() || "",
             email: document.getElementById("email")?.value.trim() || "",
             phone: document.getElementById("phone")?.value.trim() || "",
-            password: document.getElementById("password")?.value.trim() || "",
+            password: "",
             cnh: type === "motorista" ? document.getElementById("cnh")?.value.trim() || "" : ""
         };
 
-        if (type === "motorista" && !user.cnh.trim()) {
-            alert("Para cadastrar como motorista, é necessário informar a CNH.");
-            return;
-        }
-        localStorage.setItem("accessride_user", JSON.stringify(user));
+        if (type === "motorista") {
+            if (!user.cnh) {
+                alert("Para cadastrar como motorista, é necessário informar a CNH.");
+                return;
+            }
 
+            const password = document.getElementById("password")?.value.trim() || "";
+            const confirmPassword = document.getElementById("confirm-password")?.value.trim() || "";
+
+            if (!password) {
+                alert("Informe a senha.");
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                alert("As senhas não coincidem.");
+                return;
+            }
+
+            user.password = password;
+        } else {
+            const password = document.getElementById("password")?.value.trim() || "";
+            if (!password) {
+                alert("Informe a senha.");
+                return;
+            }
+            user.password = password;
+        }
+
+        localStorage.setItem("accessride_user", JSON.stringify(user));
         modal.classList.remove("hidden");
         modal.classList.add("flex");
     });
@@ -71,4 +94,5 @@ document.addEventListener("DOMContentLoaded", () => {
         modal.classList.remove("flex");
         window.location.href = "./login.html";
     });
+
 });
