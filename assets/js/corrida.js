@@ -602,7 +602,7 @@ function configurarAvaliacao() {
         <h3 class="text-2xl font-bold text-[#ff4d4d] mb-2">Sentimos muito pela sua experiência 😔</h3>
         <p class="text-[#ff9999] mb-3">Você deu ${avaliacao} ${avaliacao === 1 ? 'estrela' : 'estrelas'}.</p>
         <p class="text-[#ff9999]">Entre em contato com nosso suporte para que possamos melhorar:<br>
-        <a href="mailto:suporte@accessride.com.br" class="underline text-[#ff4d4d]">suporte@accessride.com.br</a></p>
+        <a href="mailto:accessride.contato@gmail.com" class="underline text-[#ff4d4d]">accessride.contato@gmail.com</a></p>
       `;
     }
     ensureCloseButton();
