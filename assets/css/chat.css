@@ -13,7 +13,7 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  border: 2px solid #2E51A2;
+  border: 2px solid #38e07b;
   z-index: 3000;
 
   /* animação de entrada */
@@ -30,7 +30,7 @@
 }
 
 #chatHeader {
-  background: #2E51A2;
+  background: #38e07b;
   padding: 12px;
   color: white;
   text-align: center;
@@ -72,7 +72,7 @@
 }
 
 .user {
-  background: #2E51A2;
+  background: #38e07b;
   color: white;
   align-self: flex-end;
 }
@@ -98,7 +98,7 @@
 #send-btn {
   width: 45px;
   margin-left: 8px;
-  background: #2E51A2;
+  background: #38e07b;
   color: white;
   border: none;
   border-radius: 10px;
@@ -108,7 +108,7 @@
 }
 
 #send-btn:hover {
-  background: #223d7d;
+  background: #165a31;
 }
 
 /* ---------------- BOTÃO FLUTUANTE ---------------- */

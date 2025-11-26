@@ -162,6 +162,6 @@ inputEl.addEventListener("keypress", (e) => {
 });
 
 /* Mensagem inicial */
-bot("Olá! 👋 Bem-vindo(a) ao chatbot do *AccessRide*.");
+bot("Olá! 👋 Bem-vindo(a) ao chatbot do AccessRide.");
 bot("Sou seu assistente e posso tirar dúvidas sobre o projeto.");
 showMenu();
