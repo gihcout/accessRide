@@ -62,15 +62,9 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             const password = document.getElementById("password")?.value.trim() || "";
-            const confirmPassword = document.getElementById("confirm-password")?.value.trim() || "";
 
             if (!password) {
                 alert("Informe a senha.");
-                return;
-            }
-
-            if (password !== confirmPassword) {
-                alert("As senhas não coincidem.");
                 return;
             }
 
