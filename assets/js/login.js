@@ -61,8 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
 
-        alert(`Login realizado como ${type}!`);
-        window.location.href = "../index.html";
+        localStorage.setItem("accessride_logged", "true");
+        window.location.href = "/index.html";
     });
-
 });
