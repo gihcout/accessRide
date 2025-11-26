@@ -7,11 +7,7 @@ const chatBtn = document.getElementById("chatFloatingButton");
 const chatWindow = document.getElementById("chatWindow");
 const chatClose = document.getElementById("chatClose");
 
-let state = "askName";
-let userName = "";
-let tipoCarro = "";
-let destino = "";
-let pagamento = "";
+let state = "menu";
 
 /* --- Abrir/Fechar Chat --- */
 chatBtn.addEventListener("click", () => {
@@ -26,7 +22,7 @@ chatClose.addEventListener("click", () => {
 function addMessage(text, className) {
     const msgEl = document.createElement("div");
     msgEl.classList.add("message", className);
-    msgEl.textContent = text;
+    msgEl.innerHTML = text.replace(/\n/g, "<br>");
     messagesEl.appendChild(msgEl);
     messagesEl.scrollTop = messagesEl.scrollHeight;
 }
@@ -39,44 +35,118 @@ function user(text) {
     addMessage(text, "user");
 }
 
+/* --- Menu Principal --- */
+function showMenu() {
+    bot("Como posso te ajudar? Escolha uma opção:");
+    bot(
+        "1️⃣ Sobre o projeto\n" +
+        "2️⃣ Requisitos do site\n" +
+        "3️⃣ Como funcionam as viagens\n" +
+        "4️⃣ Cadastro de motoristas e veículos\n" +
+        "5️⃣ Pagamentos e tarifas\n" +
+        "6️⃣ Acessibilidade do sistema\n" +
+        "7️⃣ Contato e suporte"
+    );
+    state = "menu";
+}
+
 /* --- Fluxo do Chat --- */
 function processInput(text) {
     text = text.trim();
-    if (!text) {
-        bot("Se precisar de uma corrida, estou à disposição 😊");
-        state = "end";
-        return;
-    }
+    if (!text) return;
 
     user(text);
 
-    switch (state) {
-        case "askName":
-            userName = text;
-            bot(`Perfeito, ${userName}! Qual tipo de carro você deseja?`);
-            bot("1.a Carro com rampa | 1.b Porta ampla | 1.c Espaço para cadeira");
-            state = "askCar";
-            break;
+    if (state === "menu") {
+        switch (text) {
+            case "1":
+                bot("📘 *Sobre o AccessRide*");
+                bot("O AccessRide é uma plataforma criada para conectar passageiros com mobilidade reduzida a motoristas treinados e veículos adaptados, garantindo um transporte seguro, inclusivo e digno.");
+                showMenu();
+                break;
 
-        case "askCar":
-            tipoCarro = text;
-            bot("Qual o destino?");
-            state = "askDestino";
-            break;
+            case "2":
+                bot("🧩 *Requisitos do site*");
+                bot(
+                    "Alguns requisitos funcionais:\n" +
+                    "• Cadastro de passageiros e motoristas\n" +
+                    "• Solicitação e agendamento de corridas\n" +
+                    "• Acompanhamento em tempo real no mapa\n" +
+                    "• Chat entre passageiro e motorista\n" +
+                    "• Pagamento via cartão ou PIX"
+                );
+                bot(
+                    "Requisitos não funcionais:\n" +
+                    "• Compatível com Android/iOS\n" +
+                    "• Alta acessibilidade visual e motora\n" +
+                    "• Segurança e criptografia de dados\n" +
+                    "• Disponibilidade 24/7"
+                );
+                showMenu();
+                break;
 
-        case "askDestino":
-            destino = text;
-            bot("Qual a forma de pagamento?");
-            bot("4.a Crédito | 4.b Débito | 4.c PIX | 4.d Dinheiro");
-            state = "askPagamento";
-            break;
+            case "3":
+                bot("🚘 *Como funcionam as viagens no AccessRide*");
+                bot(
+                    "• Passageiro informa origem e destino\n" +
+                    "• Sistema encontra motoristas próximos e adaptados\n" +
+                    "• Motorista aceita corrida e segue até o local\n" +
+                    "• Trajeto pode ser acompanhado em tempo real\n" +
+                    "• Ao final, motorista e passageiro avaliam a viagem"
+                );
+                showMenu();
+                break;
 
-        case "askPagamento":
-            pagamento = text;
-            bot("Corrida solicitada com sucesso! 🚗💨");
-            simulateDriver();
-            state = "end";
-            break;
+            case "4":
+                bot("🧑‍✈️ *Cadastro de motoristas e veículos*");
+                bot(
+                    "Regras principais:\n" +
+                    "• Motorista deve ter curso para transporte de pessoas com mobilidade reduzida\n" +
+                    "• Verificação de antecedentes\n" +
+                    "• Veículo deve ser adaptado (rampa, elevador ou suporte para cadeira)\n" +
+                    "• Veículo não pode ter mais de 18 anos\n" +
+                    "• Documentação e CSV (INMETRO) obrigatórios"
+                );
+                showMenu();
+                break;
+
+            case "5":
+                bot("💳 *Pagamentos e Tarifas*");
+                bot(
+                    "• Pagamento eletrônico via cartão ou PIX\n" +
+                    "• Tarifa baseada em distância e tempo\n" +
+                    "• Recibo eletrônico enviado ao usuário\n" +
+                    "• Plataforma retém taxa de 10% por viagem"
+                );
+                showMenu();
+                break;
+
+            case "6":
+                bot("🦽 *Acessibilidade do sistema*");
+                bot(
+                    "O AccessRide foi projetado para ser totalmente acessível:\n" +
+                    "• Botões grandes e interface simples\n" +
+                    "• Compatibilidade com leitores de tela\n" +
+                    "• Web leve e responsivo\n" +
+                    "• Fluxos simples para pessoas com necessidades motoras"
+                );
+                showMenu();
+                break;
+
+            case "7":
+                bot("📩 *Contato e Suporte*");
+                bot("Se você precisa de ajuda, encontrou um problema ou quer falar com a equipe:");
+                bot("📧 Envie um e-mail para: accessride.contato@gmail.com");
+                bot("Responderemos o mais rápido possível! 😊");
+                showMenu();
+                break;
+
+            default:
+                bot("Não entendi essa opção 😕. Por favor escolha um número de 1 a 7.");
+                showMenu();
+        }
+
+        return;
     }
 }
 
@@ -92,24 +162,6 @@ inputEl.addEventListener("keypress", (e) => {
 });
 
 /* Mensagem inicial */
-bot("Olá! Seja bem-vindo(a) ao AcessRide 😊");
-bot("Qual é o seu nome?");
-
-/* --- Simulação --- */
-async function simulateDriver() {
-    await delay(3000);
-    bot("Motorista a caminho 🚘");
-
-    await delay(3000);
-    bot("O motorista Carlos Oliveira está chegando (6 min).");
-
-    await delay(6000);
-    bot("Motorista chegou! ✔");
-
-    await delay(8000);
-    bot("Viagem concluída! Obrigado por usar o AcessRide 😄");
-}
-
-function delay(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
+bot("Olá! 👋 Bem-vindo(a) ao chatbot do *AccessRide*.");
+bot("Sou seu assistente e posso tirar dúvidas sobre o projeto.");
+showMenu();
