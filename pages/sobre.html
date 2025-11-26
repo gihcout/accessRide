@@ -9,6 +9,7 @@
 
       <!-- JS externo -->
       <script src="../assets/js/main.js" defer></script>
+      <script src="../assets/js/sobre.js" defer></script>
   </head>
 
 <body class="bg-[#111714]">
@@ -82,18 +83,27 @@
             <h2 class="text-3xl font-bold text-white mb-4">Junte-se a Nós</h2>
             <p class="text-[#9eb7a8] mb-8 max-w-2xl mx-auto">Seja um parceiro ou investidor, você pode fazer parte dessa missão de tornar o transporte mais acessível.</p>
             <div class="flex justify-center gap-4 flex-wrap">
-              <a href="../cadastro.html" class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-12 px-6 bg-[#38e07b] text-[#111714] text-base font-bold leading-normal tracking-[0.015em] hover:bg-green-400 transition-colors">
+              <a href="./cadastro.html" class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-12 px-6 bg-[#38e07b] text-[#111714] text-base font-bold leading-normal tracking-[0.015em] hover:bg-green-400 transition-colors">
                 <span class="truncate">Torne-se um Parceiro</span>
               </a>
-              <a href="mailto:suporte@accessride.com.br" 
-                class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-12 px-6 bg-[#29382f] text-white text-base font-bold leading-normal tracking-[0.015em] hover:bg-gray-700 transition-colors">
+              <button id="btnFaleConosco" class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-12 px-6 bg-[#29382f] text-white text-base font-bold leading-normal tracking-[0.015em] hover:bg-gray-700 transition-colors">
                 <span class="truncate">Fale Conosco</span>
-              </a>
+              </button>
             </div>
           </div>
         </div>
       </section>
     </main>
+
+    <div id="faleModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+      <div class="bg-[#1c2620] text-white rounded-xl p-6 w-11/12 max-w-md relative">
+        <button id="closeFale" class="absolute top-2 right-2 text-white text-xl">&times;</button>
+        <h2 class="text-2xl font-bold mb-4">Fale Conosco</h2>
+        <p class="text-[#9eb7a8] mb-4">Para entrar em contato, envie um e-mail para:</p>
+        <p class="font-bold text-[#38e07b] mb-4">suporte@accessride.com.br</p>
+        <p class="text-[#9eb7a8] text-sm">Nosso time responderá o mais rápido possível.</p>
+      </div>
+    </div>
 
     <div id="footer"></div>
 
