@@ -30,7 +30,6 @@ const carIcon = L.divIcon({
 // ---------- Botões / Modais ----------
 const btnTracar = el('btnTracar'),
       btnConfirm = el('btnConfirm'),
-      btnAjuda = el('btnAjuda'),
       closeModalBtn = el('closeModal');
 
 const modal = el('modal'),
@@ -93,7 +92,6 @@ function setButtonState(state) {
   // estados: 'preRota', 'rotaTraçada', 'viagemConfirmada', 'motoristaACaminho', 'motoristaChegou', 'emViagem', 'pósViagem'
   btnTracar.classList.toggle('hidden', !(state === 'preRota' && state !== 'rotaTraçada'));
   btnConfirm.classList.toggle('hidden', state !== 'rotaTraçada');
-  btnAjuda.classList.toggle('hidden', !(state === 'motoristaChegou' || state === 'emViagem'));
 }
 
 async function geocode(local) {
