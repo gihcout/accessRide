@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
             email: document.getElementById("email")?.value || "",
             phone: document.getElementById("phone")?.value || "",
             password: document.getElementById("password")?.value || "",
-            cnh: type === "motorista" ? document.getElementById("cnh")?.value || "" : ""
+            cnh: type === "motorista" ? document.getElementById("cnh")?.value.trim() || "" : ""
         };
 
         if (type === "motorista" && !user.cnh.trim()) {
