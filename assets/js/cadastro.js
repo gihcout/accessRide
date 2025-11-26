@@ -48,11 +48,11 @@ document.addEventListener("DOMContentLoaded", () => {
         let user = {
             type,
             driverApproved: type === "cliente",
-            name: document.getElementById("first-name")?.value || "",
-            lastName: document.getElementById("last-name")?.value || "",
-            email: document.getElementById("email")?.value || "",
-            phone: document.getElementById("phone")?.value || "",
-            password: document.getElementById("password")?.value || "",
+            name: document.getElementById("first-name")?.value.trim() || "",
+            lastName: document.getElementById("last-name")?.value.trim() || "",
+            email: document.getElementById("email")?.value.trim() || "",
+            phone: document.getElementById("phone")?.value.trim() || "",
+            password: document.getElementById("password")?.value.trim() || "",
             cnh: type === "motorista" ? document.getElementById("cnh")?.value.trim() || "" : ""
         };
 
