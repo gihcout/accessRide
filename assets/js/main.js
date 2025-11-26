@@ -35,6 +35,24 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    function updateRideButton() {
+        const isLogged = localStorage.getItem("accessride_logged") === "true";
+
+        const btnDesktop = [...document.querySelectorAll('a')]
+            .find(a => a.href.endsWith('/pages/viajar.html'));
+
+        const btnMobile = [...document.querySelectorAll('#menuMobile a')]
+            .find(a => a.href.endsWith('/pages/viajar.html'));
+
+        if (!isLogged) {
+            btnDesktop?.classList.add("opacity-40", "pointer-events-none");
+            btnMobile?.classList.add("opacity-40", "pointer-events-none");
+        } else {
+            btnDesktop?.classList.remove("opacity-40", "pointer-events-none");
+            btnMobile?.classList.remove("opacity-40", "pointer-events-none");
+        }
+    }
+
     fetch(path)
         .then(res => {
             if (!res.ok) throw new Error(`Erro ${res.status} ao carregar ${path}`);
@@ -63,25 +81,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     img.setAttribute('src', basePath + normalized);
                 }
             });
+
             initMobileMenu();
+            updateRideButton();
         })
         .catch(err => console.error('Erro ao carregar templates:', err));
 });
-
-setTimeout(() => {
-    const isLogged = localStorage.getItem("accessride_logged") === "true";
-
-    const btnDesktop = [...document.querySelectorAll('a')]
-        .find(a => a.href.endsWith('/pages/viajar.html'));
-
-    const btnMobile = [...document.querySelectorAll('#menuMobile a')]
-        .find(a => a.href.endsWith('/pages/viajar.html'));
-
-    if (!isLogged) {
-        btnDesktop?.classList.add("opacity-40", "pointer-events-none");
-        btnMobile?.classList.add("opacity-40", "pointer-events-none");
-    } else {
-        btnDesktop?.classList.remove("opacity-40", "pointer-events-none");
-        btnMobile?.classList.remove("opacity-40", "pointer-events-none");
-    }
-}, 300);
