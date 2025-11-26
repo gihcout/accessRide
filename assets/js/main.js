@@ -68,11 +68,14 @@ document.addEventListener('DOMContentLoaded', () => {
         .catch(err => console.error('Erro ao carregar templates:', err));
 });
 
-// Controle do botão "Solicite uma carona"
 setTimeout(() => {
     const isLogged = localStorage.getItem("accessride_logged") === "true";
-    const btnDesktop = document.querySelector('a[href="pages/viajar.html"]');
-    const btnMobile = document.querySelector('#menuMobile a[href="pages/viajar.html"]');
+
+    const btnDesktop = [...document.querySelectorAll('a')]
+        .find(a => a.href.endsWith('/pages/viajar.html'));
+
+    const btnMobile = [...document.querySelectorAll('#menuMobile a')]
+        .find(a => a.href.endsWith('/pages/viajar.html'));
 
     if (!isLogged) {
         btnDesktop?.classList.add("opacity-40", "pointer-events-none");
