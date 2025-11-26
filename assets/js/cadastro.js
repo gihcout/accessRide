@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
             lastName: document.getElementById("last-name")?.value.trim() || "",
             email: document.getElementById("email")?.value.trim() || "",
             phone: document.getElementById("phone")?.value.trim() || "",
-            password: "",
+            password: document.getElementById("password")?.value.trim() || "",
             cnh: type === "motorista" ? document.getElementById("cnh")?.value.trim() || "" : ""
         };
 
