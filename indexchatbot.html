@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AcessRide - Chatbot</title>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #ffffff;
+    }
+
+    /* Botão flutuante */
+    #chat-button {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 65px;
+      height: 65px;
+      border-radius: 50%;
+      background: #3db36b;
+      border: 3px solid #1a1a1a;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 30px;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+      transition: 0.3s;
+    }
+
+    #chat-button:hover {
+      transform: scale(1.08);
+    }
+
+    /* Janela do chat */
+    #chat-container {
+      position: fixed;
+      bottom: 95px;
+      right: 20px;
+      width: 340px;
+      height: 450px;
+      background: #ffffff;
+      border-radius: 18px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+      overflow: hidden;
+      display: none;
+      flex-direction: column;
+      border: 2px solid #1a1a1a;
+    }
+
+    #chat-header {
+      background: #3db36b;
+      padding: 14px;
+      color: white;
+      font-size: 18px;
+      font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #1a1a1a;
+    }
+
+    #chat-messages {
+      flex: 1;
+      padding: 12px;
+      overflow-y: auto;
+      background: #ffffff;
+    }
+
+    .message {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 14px;
+      max-width: 90%;
+    }
+
+    .bubble {
+      background: #e9e9e9;
+      padding: 10px 14px;
+      border-radius: 14px;
+      border: 1px solid #1a1a1a;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .user .bubble {
+      background: #3db36b;
+      color: #ffffff;
+      margin-left: auto;
+    }
+
+    .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 2px solid #1a1a1a;
+    }
+
+    #chat-input {
+      display: flex;
+      border-top: 2px solid #1a1a1a;
+    }
+
+    #user-input {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      outline: none;
+      font-size: 14px;
+    }
+
+    #send-btn {
+      background: #3db36b;
+      border: none;
+      color: white;
+      padding: 0 16px;
+      cursor: pointer;
+      font-size: 18px;
+      border-left: 2px solid #1a1a1a;
+    }
+  </style>
+</head>
+<body>
+
+<button id="chat-button">💬</button>
+
+<div id="chat-container">
+  <div id="chat-header">
+    AcessRide - Assistente
+    <span id="close-chat" style="cursor:pointer;font-size:22px;">×</span>
+  </div>
+
+  <div id="chat-messages"></div>
+
+  <div id="chat-input">
+    <input id="user-input" type="text" placeholder="Digite aqui..." />
+    <button id="send-btn">➤</button>
+  </div>
+</div>
+
+<script>
+let step = 0;
+const avatar = "https://i.pravatar.cc/150?img=12";
+
+const messages = document.getElementById("chat-messages");
+
+function addMessage(text, sender="bot") {
+  const msg = document.createElement("div");
+  msg.className = "message " + sender;
+
+  if (sender === "bot") {
+    msg.innerHTML = `
+      <img class="avatar" src="${avatar}" />
+      <div class="bubble">${text}</div>
+    `;
+  } else {
+    msg.innerHTML = `
+      <div class="bubble">${text}</div>
+    `;
+  }
+
+  messages.appendChild(msg);
+  messages.scrollTop = messages.scrollHeight;
+}
+
+function chatbotFlow(userText) {
+  if (!userText) {
+    addMessage("Caso tenha interesse, pode nos contratar a hora que quiser 😊");
+    step = 999;
+    return;
+  }
+
+  if (step === 0) {
+    addMessage(`Perfeito, ${userText}! Qual o tipo de carro solicitado?`);
+    addMessage("1. Carro com rampa<br>2. Porta ampla<br>3. Espaço para cadeira");
+    step = 1;
+    return;
+  }
+
+  if (step === 1) {
+    addMessage("Qual o destino?");
+    step = 2;
+    return;
+  }
+
+  if (step === 2) {
+    addMessage("Qual a forma de pagamento?");
+    addMessage("1. Cartão de crédito<br>2. Cartão de débito<br>3. PIX<br>4. Dinheiro");
+    step = 3;
+    return;
+  }
+
+  if (step === 3) {
+    addMessage("Perfeito! Corrida solicitada com sucesso 🚗💨");
+
+    setTimeout(() => {
+      addMessage("Motorista a caminho ✅<br><br>O motorista Carlos Oliveira está a caminho em um Fiat Doblo Adaptado, placa ABC-4F56.<br>Tempo estimado: 6 minutos.");
+
+      setTimeout(() => {
+        addMessage("Ebaa! Carlos Oliveira chegou! 🎉");
+
+        setTimeout(() => {
+          addMessage("O tempo de viagem é de 45 minutos.");
+
+          setTimeout(() => {
+            addMessage("Você chegou ao seu destino! Para a próxima corrida, preparamos um cupom de 5% de desconto 😊");
+          }, 10000);
+
+        }, 10000);
+
+      }, 5000);
+    }, 2000);
+
+    step = 999;
+    return;
+  }
+}
+
+// Enviar mensagem
+const sendBtn = document.getElementById("send-btn");
+const input = document.getElementById("user-input");
+
+sendBtn.onclick = () => {
+  const text = input.value.trim();
+  if (text === "") return;
+  addMessage(text, "user");
+  chatbotFlow(text);
+  input.value = "";
+};
+
+// Abrir e fechar
+const chatButton = document.getElementById("chat-button");
+const chatContainer = document.getElementById("chat-container");
+const closeChat = document.getElementById("close-chat");
+
+chatButton.onclick = () => chatContainer.style.display = "flex";
+closeChat.onclick = () => chatContainer.style.display = "none";
+
+// Mensagem automática inicial
+setTimeout(() => {
+  addMessage("Olá! Seja bem-vindo(a) ao aplicativo de corridas acessíveis AcessRide 😊");
+  setTimeout(() => addMessage("Qual seu nome?"), 1200);
+}, 800);
+</script>
+
+</body>
+</html>
+
